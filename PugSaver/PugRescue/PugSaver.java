@@ -4,7 +4,7 @@ import java.util.Objects;
 public class PugSaver {
 
 	// Moves every dog whose breed is "Golden" in the list to the back of the list
-	public static void rescueGoldens(ArrayList<Dog> list) {
+	public static void rescueGoldens(MyArrayList<Dog> list) {
 		// ArrayList<Dog> Saved = new ArrayList<Dog>();
 		// ArrayList<Dog> Notsaved = new ArrayList<Dog>();
 		int count = 0;
