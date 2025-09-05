@@ -5,5 +5,6 @@ public class PugSaverTester {
         ArrayList<Dog> test = new ArrayList<Dog>();
         test.add(new Dog("Sammy", "Golden Retriever"));
         test.add(new Dog("Ziggy"));
+        
     }
 }

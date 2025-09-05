@@ -5,13 +5,11 @@ public class PugSaver {
 
 	// Moves every dog whose breed is "Golden" in the list to the back of the list
 	public static void rescueGoldens(MyArrayList<Dog> list) {
-		// ArrayList<Dog> Saved = new ArrayList<Dog>();
-		// ArrayList<Dog> Notsaved = new ArrayList<Dog>();
 		int count = 0;
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getBreed().toLowerCase().contains("golden")) {
 				for (int j = list.size(); j > 0; j--) {
-					if(i >= j){
+					if (i >= j) {
 						break;
 					}
 					if (!(list.get(i).getBreed().toLowerCase().contains("golden"))) {
@@ -21,7 +19,7 @@ public class PugSaver {
 						count++;
 					}
 				}
-				if(count + i > list.size()){
+				if (count + i > list.size()) {
 					break;
 				}
 			}
