@@ -50,7 +50,7 @@ public class MyArrayList<E> {
 	// O(1)
 	public E get(int index) {
 		if (index < 0 || index >= objectCount) {
-			throw new IllegalArgumentException();
+			throw new IndexOutOfBoundsException();
 		}
 
 		return internalArray[index];
@@ -85,12 +85,12 @@ public class MyArrayList<E> {
 	@SuppressWarnings("unchecked")
 	// O(n)
 	public void add(int index, E obj) {
-		if (index < 0 || index >= objectCount) {
+		if (index < 0 || index > objectCount) {
 			throw new IllegalArgumentException();
 		}
 		if (objectCount == internalArray.length) {
 			E[] newArray = (E[]) new Object[internalArray.length * 2];
-			for (int i = 0; i < newArray.length; i++) {
+			for (int i = 0; i < internalArray.length + 1; i++) {
 				if (i < index) {
 					newArray[i] = internalArray[i];
 				} else if (i == index) {
@@ -99,6 +99,10 @@ public class MyArrayList<E> {
 					newArray[i] = internalArray[i - 1];
 				}
 			}
+			internalArray = newArray;
+
+		} else if (index == objectCount) {
+			internalArray[index] = obj;
 		} else {
 			for (int i = objectCount - 1; i >= index; i--) {
 				internalArray[i + 1] = internalArray[i];
@@ -125,7 +129,7 @@ public class MyArrayList<E> {
 		}
 
 		E removed = internalArray[index];
-		for (int i = index; i < objectCount; i--) {
+		for (int i = index; i < objectCount - 1; i++) {
 			internalArray[i] = internalArray[i + 1];
 		}
 		internalArray[objectCount] = null;
@@ -143,16 +147,16 @@ public class MyArrayList<E> {
 	// O(n)
 	public boolean remove(E obj) {
 		if (this.contains(obj)) {
-			for (int i = 0; i < internalArray.length; i++) {
+			for (int i = 0; i < internalArray.length - 1; i++) {
 				if (internalArray[i].equals(obj)) {
+					this.remove(i);
 					return true;
 				}
 			}
+			return true;
 		} else {
 			return false;
 		}
-
-		return false;
 	}
 
 
@@ -169,20 +173,20 @@ public class MyArrayList<E> {
 			return "[]";
 		}
 
-		String array = "[";
+		StringBuilder aString = new StringBuilder("[");
 		for (int i = 0; i < objectCount - 1; i++) {
 			if (internalArray[i] == null) {
-				array += "null";
+				aString.append("null, ");
 			} else {
-				array += internalArray[i].toString() + ", ";
+				aString.append(internalArray[i].toString() + ", ");
 			}
 		}
-		if (internalArray[objectCount] == null) {
-			array += "null]";
+		if (internalArray[objectCount - 1] == null) {
+			aString.append("null]");
 		} else {
-			array += internalArray[objectCount - 1].toString() + "]";
+			aString.append(internalArray[objectCount - 1].toString() + "]");
 		}
-		return array;
+		return aString.toString();
 	}
 
 }
