@@ -30,15 +30,16 @@ public class MyArrayList<E> {
 	/* Return the number of active slots in the array list */
 	// O(1)
 	public int size() {
-		if (internalArray == null) {
-			throw new IllegalArgumentException();
-		}
 		return objectCount;
 	}
 
 	/* Are there zero objects in the array list? */
 	// O(1)
 	public boolean isEmpty() {
+		if (internalArray == null) {
+			throw new NullPointerException();
+		}
+
 		if (objectCount == 0) {
 			return true;
 		}
@@ -73,9 +74,19 @@ public class MyArrayList<E> {
 	 */
 	// O(n)
 	public boolean contains(E obj) {
-		for (int i = 0; i < internalArray.length; i++) {
-			if (internalArray[i].equals(obj)) {
-				return true;
+		if (obj == null) {
+			for (int i = 0; i < objectCount; i++) {
+				if (internalArray[i] == obj) {
+					return true;
+				}
+			}
+		} else {
+			for (int i = 0; i < objectCount; i++) {
+				if (internalArray[i] != null) {
+					if (internalArray[i].equals(obj)) {
+						return true;
+					}
+				}
 			}
 		}
 		return false;
@@ -125,7 +136,7 @@ public class MyArrayList<E> {
 	// O(n)
 	public E remove(int index) {
 		if (index < 0 || index >= objectCount) {
-			throw new IllegalArgumentException();
+			throw new IndexOutOfBoundsException();
 		}
 
 		E removed = internalArray[index];
@@ -168,7 +179,7 @@ public class MyArrayList<E> {
 	// O(n)
 	public String toString() {
 		if (internalArray == null) {
-			throw new IllegalArgumentException();
+			throw new NullPointerException();
 		} else if (this.size() == 0) {
 			return "[]";
 		}
