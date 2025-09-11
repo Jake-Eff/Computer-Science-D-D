@@ -82,7 +82,8 @@ public class MyArrayList<E> {
 			}
 		} else {
 			for (int i = 0; i < objectCount; i++) {
-				if (internalArray[i] != null) {
+				if (internalArray[i] == null) {
+				} else {
 					if (internalArray[i].equals(obj)) {
 						return true;
 					}
@@ -159,7 +160,7 @@ public class MyArrayList<E> {
 	public boolean remove(E obj) {
 		if (this.contains(obj)) {
 			for (int i = 0; i < internalArray.length - 1; i++) {
-				if (internalArray[i].equals(obj)) {
+				if (internalArray[i] == obj) {
 					this.remove(i);
 					return true;
 				}
@@ -178,9 +179,7 @@ public class MyArrayList<E> {
 	 */
 	// O(n)
 	public String toString() {
-		if (internalArray == null) {
-			throw new NullPointerException();
-		} else if (this.size() == 0) {
+		if (this.size() == 0) {
 			return "[]";
 		}
 
