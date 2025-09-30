@@ -134,6 +134,9 @@ public class SinglyLinkedList<E> {
 
 	// Returns the i-th element.
 	public E get(int i) {
+		if(i < 0 || i >= nodeCount ){
+			throw new IndexOutOfBoundsException();
+		}
 		int count = 0;
 		ListNode<E> val = new ListNode<E>((E) null);
 		for (ListNode<E> k = head; count < i; k = k.getNext()) {
@@ -145,6 +148,9 @@ public class SinglyLinkedList<E> {
 
 	// Replaces the i-th element with obj and returns the old value.
 	public E set(int i, Object obj) {
+		if(i < 0 || i >= nodeCount ){
+			throw new IndexOutOfBoundsException();
+		}
 
 	}
 
@@ -160,9 +166,18 @@ public class SinglyLinkedList<E> {
 
 	// Returns a string representation of this list exactly like that for MyArrayList.
 	public String toString() {
+		if(isEmpty()){
+			return "[]";
+		}
 
+		StringBuilder list = new StringBuilder("[");
+		for (ListNode<E> i = head; i != tail; i = i.getNext()){
+			list.append(i.getValue() + ", ");
+		}
+		list.append(tail.getValue() + "]");
+		return list.toString();
 
 	}
 
-
 }
+
