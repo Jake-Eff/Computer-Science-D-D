@@ -113,19 +113,48 @@ public class DoublyLinkedList {
 
 	// Returns the i-th element.
 	public Nucleotide get(int i) {
-		
+		if (i < 0 || i >= nodeCount) {
+			throw new IndexOutOfBoundsException();
+		}
+		ListNode2<Nucleotide> temp = SENTINEL;
+		for (int j = 0; j < i; j++) {
+			temp = temp.getNext();
+		}
+		return temp.getValue();
 	}
 
 	// Replaces the i-th element with obj and returns the old value.
-	public Nucleotide set(int i, Nucleotide obj) {}
+	public Nucleotide set(int i, Nucleotide obj) {
+		Nucleotide temp = get(i);
+		ListNode2<Nucleotide> thing = SENTINEL;
+		for (int j = 0; j < i; j++) {
+			thing = thing.getNext();
+		}
+		thing.setValue(obj);
+		return temp;
+
+	}
 
 	// Inserts obj to become the i-th element. Increments the size
 	// of the list by one.
-	public void add(int i, Nucleotide obj) {}
+	public void add(int i, Nucleotide obj) {
+		ListNode2<Nucleotide> sent = new ListNode2<Nucleotide>(obj);
+		ListNode2<Nucleotide> thing = new ListNode2<Nucleotide>(obj);
+		for (int j = 0; j < i; j++) {
+			sent = sent.getNext();
+		}
+
+		sent.getPrevious().setNext(thing);
+		thing.setNext(sent);
+		sent.setPrevious(thing);
+
+	}
 
 	// Removes the i-th element and returns its value.
 	// Decrements the size of the list by one.
-	public Nucleotide remove(int i) {}
+	public Nucleotide remove(int i) {
+		
+	}
 
 	// Returns a string representation of this list exactly like that for MyArrayList.
 	public String toString() {
