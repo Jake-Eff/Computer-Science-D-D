@@ -9,6 +9,8 @@ public class DoublyLinkedList {
 	// Constructor: creates an empty list
 	public DoublyLinkedList() {
 		nodeCount = 0;
+		SENTINEL.setNext(SENTINEL);
+		SENTINEL.setPrevious(SENTINEL);
 	}
 
 	// Constructor: creates a list that contains
@@ -88,20 +90,20 @@ public class DoublyLinkedList {
 	// Removes the first element that is equal to obj, if any.
 	// Returns true if successful; otherwise returns false.
 	public boolean remove(Nucleotide obj) {
-		if (obj == null) {
-			throw new NullPointerException();
-		}
-
 		if (nodeCount == 0) {
 			return false;
-		} else if (SENTINEL.getNext().equals(obj)) {
-			SENTINEL.setNext(SENTINEL.getPrevious());
+		} else if (SENTINEL.getNext().getValue().equals(obj)) {
+			SENTINEL.setNext(SENTINEL.getNext().getNext());
+			SENTINEL.getNext().setPrevious(SENTINEL);
+			nodeCount--;
 			return true;
 		}
 
 		for (ListNode2<Nucleotide> i = SENTINEL.getNext(); i != SENTINEL; i = i.getNext()) {
 			if (i.getValue().equals(obj)) {
 				i.getPrevious().setNext(i.getNext());
+				i.getNext().setPrevious(i.getPrevious());
+				nodeCount--;
 				return true;
 			}
 		}
@@ -153,18 +155,47 @@ public class DoublyLinkedList {
 	// Removes the i-th element and returns its value.
 	// Decrements the size of the list by one.
 	public Nucleotide remove(int i) {
-		
+		if (i < 0 || i >= nodeCount) {
+			throw new IndexOutOfBoundsException();
+		}
+
+		ListNode2<Nucleotide> old = SENTINEL.getNext();
+		for (int j = 0; j < i; j++) {
+			old = old.getNext();
+		}
+
+		old.getPrevious().setNext(old.getNext());
+		old.getNext().setPrevious(old.getPrevious());
+		nodeCount--;
+		return old.getValue();
 	}
 
 	// Returns a string representation of this list exactly like that for MyArrayList.
 	public String toString() {
+		if (isEmpty()) {
+			return "[]";
+		}
 
+		StringBuilder list = new StringBuilder("[");
+		ListNode2<Nucleotide> current = SENTINEL.getNext();
+		for (ListNode2<Nucleotide> i = current; !(i.equals(SENTINEL.getPrevious())); i =
+				i.getNext()) {
+			list.append(current.getValue() + ", ");
+			current = current.getNext();
+		}
+		list.append(SENTINEL.getPrevious().getValue() + "]");
+		return list.toString();
 
 	}
 
 	// Like question 7 on the SinglyLinkedList test:
 	// Add a "segment" (another list) onto the end of this list
 	public void addSegmentToEnd(DoublyLinkedList seg) {
+		ListNode2<Nucleotide> current = seg.getHead();
+		for (int i = 0; i < seg.size(); i++) {
+			add(current.getValue());
+			current = current.getNext();
+		}
 
 	}
 
@@ -173,7 +204,21 @@ public class DoublyLinkedList {
 	// (on the test these nodes were assumed to contain CCCCCCCCGGGGGGGG, but here
 	// you do not need to assume or check for that)
 	public void removeCCCCCCCCGGGGGGGG(ListNode2<Nucleotide> nodeBefore) {
+		if(nodeCount <= 16){
+			throw new IllegalArgumentException("List too small!");
+		}
+		if(nodeCount - indexOf(nodeBefore.getValue()) <= 16){
+			throw new IllegalArgumentException("Node too close to end!");
+		}
+		
+		ListNode2<Nucleotide> current = nodeBefore;
+		for (int i = 0; i < 16; i++) {
+			current = current.getNext();
+		}
 
+		current.setPrevious(nodeBefore);
+		nodeBefore.setNext(current);
+		nodeCount -= 16;
 	}
 
 	// Like question 9 on the SinglyLinkedList test:
@@ -187,13 +232,30 @@ public class DoublyLinkedList {
 	// Delete the last three nodes in the list
 	// If there are not enough nodes, return false
 	public boolean deleteLastThree() {
+		if (nodeCount < 3) {
+			return false;
+		}
 
+		SENTINEL.getPrevious().getPrevious().getPrevious().getPrevious().setNext(SENTINEL);
+		nodeCount -= 3;
+		return true;
 	}
 
 	// Like question 11 on the SinglyLinkedList test:
 	// Replaces every node containing "A" with three nodes containing "T" "A" "C"
 	public void replaceEveryAWithTAC() {
-
+		if(isEmpty()){
+			throw new IllegalArgumentException("Empty list!");
+		}
+		int index = 0;
+		for (ListNode2<Nucleotide> i = SENTINEL.getNext(); i != SENTINEL; i = i.getNext()) {
+			if(i.getValue() == Nucleotide.A){
+				add(index + 1, Nucleotide.T);
+				add(index + 2, Nucleotide.C);
+				index += 2;
+			}
+			index ++;
+		}
 	}
 
 }
