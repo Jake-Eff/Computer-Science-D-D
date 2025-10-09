@@ -1,3 +1,4 @@
+import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 
 public class DoublyLinkedList {
@@ -90,14 +91,14 @@ public class DoublyLinkedList {
 	// Removes the first element that is equal to obj, if any.
 	// Returns true if successful; otherwise returns false.
 	public boolean remove(Nucleotide obj) {
-		if (nodeCount == 0) {
-			return false;
-		} else if (SENTINEL.getNext().getValue().equals(obj)) {
-			SENTINEL.setNext(SENTINEL.getNext().getNext());
-			SENTINEL.getNext().setPrevious(SENTINEL);
-			nodeCount--;
-			return true;
-		}
+		// if (nodeCount == 0) {
+		// return false;
+		// } else if (SENTINEL.getNext().getValue().equals(obj)) {
+		// SENTINEL.setNext(SENTINEL.getNext().getNext());
+		// SENTINEL.getNext().setPrevious(SENTINEL);
+		// nodeCount--;
+		// return true;
+		// }
 
 		for (ListNode2<Nucleotide> i = SENTINEL.getNext(); i != SENTINEL; i = i.getNext()) {
 			if (i.getValue().equals(obj)) {
@@ -183,12 +184,13 @@ public class DoublyLinkedList {
 
 		StringBuilder list = new StringBuilder("[");
 		ListNode2<Nucleotide> current = SENTINEL.getNext();
-		for (ListNode2<Nucleotide> i = current; !(i.equals(SENTINEL.getPrevious())); i =
-				i.getNext()) {
-			list.append(current.getValue() + ", ");
-			current = current.getNext();
+		for (ListNode2<Nucleotide> i = current; i != SENTINEL; i = i.getNext()) {
+			list.append(i.getValue());
+			if (i.getNext() != SENTINEL) {
+				list.append(", ");
+			}
 		}
-		list.append(SENTINEL.getPrevious().getValue() + "]");
+		list.append("]");
 		return list.toString();
 
 	}
@@ -215,13 +217,12 @@ public class DoublyLinkedList {
 		if (nodeCount <= 16) {
 			throw new IllegalArgumentException("List too small!");
 		}
-		if (nodeCount - indexOf(nodeBefore.getValue()) <= 16) {
-			throw new IllegalArgumentException("Node too close to end!");
-		}
-
 		ListNode2<Nucleotide> current = nodeBefore;
 		for (int i = 0; i < 16; i++) {
 			current = current.getNext();
+			if (current == SENTINEL) {
+				throw new IllegalArgumentException("Node too close to end!");
+			}
 		}
 
 		current.setPrevious(nodeBefore);
@@ -243,7 +244,7 @@ public class DoublyLinkedList {
 			ListNode2<Nucleotide> segCurrent = seg.getHead();
 			int count = 0;
 			for (int i = 0; i < seg.size(); i++) {
-				if (!(point.getValue().equals(segCurrent.getValue())) || point == SENTINEL) {
+				if (point == SENTINEL || !(point.getValue().equals(segCurrent.getValue()))) {
 					break;
 				}
 				point = point.getNext();
@@ -271,7 +272,10 @@ public class DoublyLinkedList {
 			return false;
 		}
 
-		SENTINEL.getPrevious().getPrevious().getPrevious().getPrevious().setNext(SENTINEL);
+		ListNode2<Nucleotide> tail =
+				SENTINEL.getPrevious().getPrevious().getPrevious().getPrevious();
+		tail.setNext(SENTINEL);
+		SENTINEL.setPrevious(tail);
 		nodeCount -= 3;
 		return true;
 	}
@@ -284,10 +288,11 @@ public class DoublyLinkedList {
 		}
 		int index = 0;
 		for (ListNode2<Nucleotide> i = SENTINEL.getNext(); i != SENTINEL; i = i.getNext()) {
-			if (i.getValue() == Nucleotide.A) {
+			if (i.getValue().equals(Nucleotide.A)) {
 				add(index + 1, Nucleotide.C);
 				add(index, Nucleotide.T);
 				index += 2;
+				i = i.getNext();
 			}
 			index++;
 		}
