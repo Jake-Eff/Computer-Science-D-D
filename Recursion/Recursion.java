@@ -3,7 +3,13 @@ public class Recursion {
 	// Prints the value of every node in the singly linked list with the given head,
 	// but in reverse
 	public static void printListInReverse(ListNode head) {
-
+		ListNode current = new ListNode(head);
+		if (current.getNext() == null) {
+			System.out.println(current.getValue());
+		} else {
+			printListInReverse(current.getNext());
+			System.out.println(current.getValue());
+		}
 	}
 
 	// For the given 2D array of Strings, replaces the String at index[r][c]
@@ -15,7 +21,18 @@ public class Recursion {
 	// Trying to infect outside the confines of the grid also has no effect
 	// Precondition: grid has no null entries
 	public static void infect(String[][] grid, int r, int c) {
-
+		if (r < 0 || r > grid.length || c < 0 || c > grid[0].length) {
+			throw new IndexOutOfBoundsException();
+		}
+		if (grid[r][c] == "vaccinated" || grid[r][c] == "infected") {
+			return;
+		} else {
+			grid[r][c] = "infected";
+			infect(grid, r, c + 1);
+			infect(grid, r, c - 1);
+			infect(grid, r + 1, c);
+			infect(grid, r - 1, c);
+		}
 	}
 
 	// How many subsets are there of the numbers 1...n
@@ -25,8 +42,13 @@ public class Recursion {
 	// The other subsets of 1,2,3,4 that DO contain consecutive integers are
 	// {1,2}, {2,3}, {3,4}, {1,2,3}, {1,2,4}, {1,3,4}, {1,2,3,4}
 	// Precondition: n > 0
+	// its literally fibonacci bro
 	public static long countNonConsecutiveSubsets(int n) {
-
+		if (n == 1 || n == 2) {
+			return n + 1;
+		} else {
+			return countNonConsecutiveSubsets(n - 1) + countNonConsecutiveSubsets(n + 2);
+		}
 	}
 
 	// A kid at the bottom of the stairs can jump up 1, 2, or 3 stairs at a time.
