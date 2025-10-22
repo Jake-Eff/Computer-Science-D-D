@@ -56,7 +56,11 @@ public class Recursion {
 	// Jumping 1-1-2 is considered different than jumping 1-2-1
 	// Precondition: n > 0
 	public static long countWaysToJumpUpStairs(int n) {
-		
+		if (n == 1) {
+			return 1;
+		} else {
+			return (n - 1) + countWaysToJumpUpStairs(n - 1);
+		}
 	}
 
 	// Everything above this line does NOT require a recursive helper method
@@ -71,6 +75,11 @@ public class Recursion {
 	// For example, subsets("abc") would print out "", "a", "b", "c", "ab", "ac",
 	// "bc", "abc"
 	// Order is your choice
+
+	public String recursiveString(String str){
+		
+	}
+
 	public static void printSubsets(String str) {
 
 	}
