@@ -56,7 +56,7 @@ public class Recursion {
 	// Jumping 1-1-2 is considered different than jumping 1-2-1
 	// Precondition: n > 0
 	public static long countWaysToJumpUpStairs(int n) {
-
+		
 	}
 
 	// Everything above this line does NOT require a recursive helper method
