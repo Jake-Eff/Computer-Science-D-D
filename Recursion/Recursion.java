@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Recursion {
 
 	// Prints the value of every node in the singly linked list with the given head,
@@ -76,8 +78,10 @@ public class Recursion {
 	// "bc", "abc"
 	// Order is your choice
 
-	public String recursiveString(String str) {
-
+	public String subsets(String str) {
+		if(str.length() == 2){
+			ArrayList<String> makeSubsets = new ArrayList<>(String str);
+		}
 	}
 
 	public static void printSubsets(String str) {
