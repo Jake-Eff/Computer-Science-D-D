@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.lang.StringBuilder;
 
 public class Recursion {
 
@@ -78,14 +79,33 @@ public class Recursion {
 	// "bc", "abc"
 	// Order is your choice
 
-	public String subsets(String str) {
-		if(str.length() == 2){
-			ArrayList<String> makeSubsets = new ArrayList<>(String str);
+	// creatSubsets returns every subset of the original string, which is inputed by the parameter str. It does this recursively, repeating itself until the size of the string it intakes is 1. When this happens, the method will return an array list with a blank element and the string with length 1. For any other case, the method saves the first character of the string as a variable, then will return each subset of the string without this character and with it, ensuring that every subset is returned.
+
+	public static ArrayList<String> createSubsets(String str) {
+		if (str.length() == 1) {
+			ArrayList<String> end = new ArrayList<String>();
+			end.add("");
+			end.add(str);
+			return end;
+		} else {
+			String first = str.substring(0, 1);
+			ArrayList<String> previous = createSubsets(str.substring(1, str.length()));
+			ArrayList<String> returning = new ArrayList<String>();
+			for (int i = 0; i < previous.size(); i++) {
+				returning.add(first + previous.get(i));
+			}
+			returning.addAll(previous);
+			return returning;
 		}
 	}
 
 	public static void printSubsets(String str) {
-
+		ArrayList<String> printing = createSubsets(str);
+		StringBuilder thing = new StringBuilder();
+		for (int i = 0; i < printing.size() - 1; i++) {
+			thing.append("\"" + printing.get(i) + "\", ");
+		}
+		thing.append("\"" + printing.get(printing.size() - 1) + "\"");
 	}
 
 	// List contains a single String to start.
