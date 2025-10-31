@@ -79,7 +79,12 @@ public class Recursion {
 	// "bc", "abc"
 	// Order is your choice
 
-	// creatSubsets returns every subset of the original string, which is inputed by the parameter str. It does this recursively, repeating itself until the size of the string it intakes is 1. When this happens, the method will return an array list with a blank element and the string with length 1. For any other case, the method saves the first character of the string as a variable, then will return each subset of the string without this character and with it, ensuring that every subset is returned.
+	// creatSubsets returns every subset of the original string, which is inputed by the parameter
+	// str. It does this recursively, repeating itself until the size of the string it intakes is 1.
+	// When this happens, the method will return an array list with a blank element and the string
+	// with length 1. For any other case, the method saves the first character of the string as a
+	// variable, then will return each subset of the string without this character and with it,
+	// ensuring that every subset is returned.
 
 	public static ArrayList<String> createSubsets(String str) {
 		if (str.length() == 1) {
@@ -106,6 +111,7 @@ public class Recursion {
 			thing.append("\"" + printing.get(i) + "\", ");
 		}
 		thing.append("\"" + printing.get(printing.size() - 1) + "\"");
+		System.out.println(thing);
 	}
 
 	// List contains a single String to start.
@@ -114,12 +120,54 @@ public class Recursion {
 	// For example, permute("abc") could print out "abc", "acb", "bac", "bca",
 	// "cab", "cba"
 	// Order is your choice
-	public static void printPermutations(String str) {
 
+	//creatPerm takes in a string and creates all permutations of it. It does this through recursion, repeating itself until the length of the string parameter is 2. It repeats, taking the string without the first letter, then checking 
+
+	public static ArrayList<String> createPerm(String str) {
+		ArrayList<String> list = new ArrayList<String>();
+		if (str.length() == 1) {
+			list.add(str);
+			return list;
+		} else if (str.length() == 2) {
+			list.add(str);
+			list.add(str.substring(1, 2) + str.substring(0, 1));
+			return list;
+		}
+		ArrayList<String> perms = createPerm(str.substring(1));
+		for (int i = 0; i < perms.get(0).length(); i++) {
+			for (int j = 0; j <= str.length() - 1; j++) {
+				String adding = "";
+				if (j == 0) {
+					adding = str.substring(0, 1) + perms.get(i);
+				} else if (j == perms.get(i).length()) {
+					adding = perms.get(i) + str.substring(0, 1);
+				} else {
+					adding = perms.get(i).substring(0, j) + str.substring(0, 1)
+							+ perms.get(i).substring(j, perms.get(i).length());
+				}
+				list.add(adding);
+			}
+
+		}
+		return list;
+	}
+
+	public static void printPermutations(String str) {
+		ArrayList<String> printing = createPerm(str);
+		StringBuilder thing = new StringBuilder();
+		for (int i = 0; i < printing.size() - 1; i++) {
+			thing.append("\"" + printing.get(i) + "\", ");
+		}
+		thing.append("\"" + printing.get(printing.size() - 1) + "\"");
+		System.out.println(thing);
 	}
 
 	// Performs a mergeSort on the given array of ints
 	// Precondition: you may assume there are NO duplicates!!!
+	public static ArrayList<Integer> makeList(int[] ints){
+		
+	}
+
 	public static void mergeSort(int[] ints) {
 
 	}
@@ -161,7 +209,7 @@ public class Recursion {
 	// time 9
 	// for a total of 20 points, so it would return 20.
 	public static int scavHunt(int[] times, int[] points) {
-
+	
 	}
 
 }
