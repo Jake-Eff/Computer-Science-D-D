@@ -121,7 +121,9 @@ public class Recursion {
 	// "cab", "cba"
 	// Order is your choice
 
-	//creatPerm takes in a string and creates all permutations of it. It does this through recursion, repeating itself until the length of the string parameter is 2. It repeats, taking the string without the first letter, then checking 
+	// creatPerm takes in a string and creates all permutations of it. It does this through
+	// recursion, repeating itself until the length of the string parameter is 2. It repeats, taking
+	// the string without the first letter, then checking
 
 	public static ArrayList<String> createPerm(String str) {
 		ArrayList<String> list = new ArrayList<String>();
@@ -162,14 +164,42 @@ public class Recursion {
 		System.out.println(thing);
 	}
 
-	// Performs a mergeSort on the given array of ints
-	// Precondition: you may assume there are NO duplicates!!!
-	public static ArrayList<Integer> makeList(int[] ints){
-		
+
+	// Combine takes two array lists and combines them into one array list
+
+	public static ArrayList<Integer> combine(ArrayList<Integer> first, ArrayList<Integer> second) {
+		ArrayList<Integer> combined = new ArrayList<Integer>(first.size() + second.size());
+		for (int i = 0; i < first.size() - 1; i++) {
+			combined.set(i, first.get(i));
+		}
+		for (int i = 0; i < second.size() - 1; i++) {
+			combined.set((first.size() + i), second.get(i));
+		}
+		return combined;
 	}
 
+	// Performs a mergeSort on the given array of ints
+	// Precondition: you may assume there are NO duplicates!!!
 	public static void mergeSort(int[] ints) {
-
+		if (ints.length == 1 || ints.length == 0) {
+			return;
+		}
+		int[] right;
+		if (ints.length % 2 == 1) {
+			right = new int[(ints.length / 2 + 1)];
+		} else {
+			right = new int[ints.length / 2];
+		}
+		int[] left = new int[ints.length / 2];
+		for (int i = 0; i < ints.length; i++) {
+			if (i < ints.length / 2) {
+				left[i] = ints[i];
+			} else if (i == ints.length / 2) {
+				right[i] = ints[i];
+			} else {
+				right[i] = ints[ints.length / 2 + i];
+			}
+		}
 	}
 
 	// Performs a quickSort on the given array of ints
@@ -209,7 +239,7 @@ public class Recursion {
 	// time 9
 	// for a total of 20 points, so it would return 20.
 	public static int scavHunt(int[] times, int[] points) {
-	
+
 	}
 
 }
