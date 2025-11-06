@@ -197,8 +197,22 @@ public class Recursion {
 			} else if (i == ints.length / 2) {
 				right[i] = ints[i];
 			} else {
-				right[i] = ints[ints.length / 2 + i];
+				right[i - ints.length / 2] = ints[i];
 			}
+		}
+		mergeSort(left);
+		mergeSort(right);
+		ArrayList<Integer> firstHalf = new ArrayList<Integer>();
+		ArrayList<Integer> secondHalf = new ArrayList<Integer>();
+		for (int i = 0; i < left.length; i++) {
+			firstHalf.add(left[i]);
+		}
+		for (int i = 0; i < right.length; i++) {
+			secondHalf.add(right[i]);
+		}
+		ArrayList<Integer> finalList = combine(firstHalf, secondHalf);
+		for (int i = 0; i < left.length; i++) {
+			ints[i] = finalList.get(i);
 		}
 	}
 
@@ -209,6 +223,24 @@ public class Recursion {
 
 	}
 
+	public static void solveOnMiddle(int startingDisks, int start, int end, int free) {
+		if (startingDisks == 1) {
+			System.out.println("" + start + " -> " + end + "");
+			return;
+		} else if (startingDisks == 2) {
+			System.out.println("" + start + " -> " + free + "");
+			System.out.println("" + start + " -> " + end + "");
+			System.out.println("" + free + " -> " + end + "");
+			return;
+		} else {
+			solveOnMiddle(startingDisks - 1, start, free, end);
+			System.out.println("" + start + " -> " + end + "");
+			solveOnMiddle(startingDisks - 1, free, end, start);
+
+		}
+
+	}
+
 	// Prints a sequence of moves (one on each line)
 	// to complete a Towers of Hanoi problem:
 	// disks start on tower 0 and must end on tower 2.
@@ -216,7 +248,9 @@ public class Recursion {
 	// the form "1 -> 2", meaning "take the top disk of tower 1 and
 	// put it on tower 2" etc.
 	public static void solveHanoi(int startingDisks) {
-
+		solveOnMiddle(startingDisks - 1, 0, 1, 2);
+		System.out.println("0 -> 2");
+		solveOnMiddle(startingDisks - 1, 1, 2, 0);
 	}
 
 	// You are partaking in a scavenger hunt!

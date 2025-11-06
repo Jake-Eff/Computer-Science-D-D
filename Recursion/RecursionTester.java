@@ -6,5 +6,6 @@ public class RecursionTester {
         String str1 = "cd";
         String str2 = "bcd";
         Recursion.printPermutations(str1);
+        Recursion.solveHanoi(4);
     }
 }
