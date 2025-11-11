@@ -254,6 +254,67 @@ public class Recursion {
 		solveOnMiddle(startingDisks - 1, 1, 2, 0);
 	}
 
+	public static int maxReward(int[] times, int[] points, int index) {
+		if (times.length == 0) {
+			return 0;
+		} else if (times.length == 1) {
+			return points[0];
+		}
+
+		// int[] newTimes = new int[times.length - 1];
+		// int[] newPoints = new int[points.length - 1];
+		// for (int i = 1; i < times.length; i++) {
+		// newTimes[i] = times[i];
+		// newPoints[i] = points[i];
+		// }
+
+		// maxReward(newTimes, newPoints, index);
+
+		// int max = 0;
+		// int maxIndex = 0;
+		// for (int i = 0; i < points.length; i++) {
+		// if (points[i] > max) {
+		// max = points[i];
+		// maxIndex = i;
+		// }
+		// }
+
+
+
+		if (times.length - index - 1 == 0) {
+			return points[index];
+		} else if (times.length - index - 1 < 0) {
+			return 0;
+		} else {
+			int newIndex = -1;
+			if (times.length - index - 1 > 5) {
+				for (int i = 1; i < 6; i++) {
+					if (times[i + index] > (times[index] + 4)) {
+						newIndex = i + index;
+						break;
+					}
+				}
+			} else {
+				for (int i = 0; i < times.length - index; i++) {
+					if (times[i + index] > (times[index] + 4)) {
+						newIndex = i + index;
+						break;
+					}
+				}
+			}
+			int leftOver = 0;
+			if (newIndex == -1){
+				for (int i = index; i < points.length; i++) {
+					if(points[i] > leftOver){
+						leftOver = points[i];
+					}
+				}
+				return leftOver;
+			}
+			int
+		}
+	}
+
 	// You are partaking in a scavenger hunt!
 	// You've gotten a secret map to find many of the more difficult
 	// items, but they are only available at VERY specific times at
