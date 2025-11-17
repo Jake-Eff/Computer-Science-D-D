@@ -216,6 +216,13 @@ public class Recursion {
 		}
 	}
 
+
+	public static void swap(int[] ints, int one, int two) {
+		int value = ints[one];
+		ints[one] = ints[two];
+		ints[two] = value;
+	}
+
 	// Performs a quickSort on the given array of ints
 	// Use the middle element (index n/2) as the pivot
 	// Precondition: you may assume there are NO duplicates!!!
@@ -255,32 +262,6 @@ public class Recursion {
 	}
 
 	public static int maxReward(int[] times, int[] points, int index) {
-		if (times.length == 0) {
-			return 0;
-		} else if (times.length == 1) {
-			return points[0];
-		}
-
-		// int[] newTimes = new int[times.length - 1];
-		// int[] newPoints = new int[points.length - 1];
-		// for (int i = 1; i < times.length; i++) {
-		// newTimes[i] = times[i];
-		// newPoints[i] = points[i];
-		// }
-
-		// maxReward(newTimes, newPoints, index);
-
-		// int max = 0;
-		// int maxIndex = 0;
-		// for (int i = 0; i < points.length; i++) {
-		// if (points[i] > max) {
-		// max = points[i];
-		// maxIndex = i;
-		// }
-		// }
-
-
-
 		if (times.length - index - 1 == 0) {
 			return points[index];
 		} else if (times.length - index - 1 < 0) {
@@ -303,15 +284,21 @@ public class Recursion {
 				}
 			}
 			int leftOver = 0;
-			if (newIndex == -1){
+			if (newIndex == -1) {
 				for (int i = index; i < points.length; i++) {
-					if(points[i] > leftOver){
+					if (points[i] > leftOver) {
 						leftOver = points[i];
 					}
 				}
 				return leftOver;
 			}
-			int
+			int taken = points[index] + maxReward(times, points, newIndex);
+			int notTaken = maxReward(times, points, index + 1);
+			if (taken > notTaken) {
+				return taken;
+			} else {
+				return notTaken;
+			}
 		}
 	}
 
@@ -335,7 +322,7 @@ public class Recursion {
 	// time 9
 	// for a total of 20 points, so it would return 20.
 	public static int scavHunt(int[] times, int[] points) {
-
+		return maxReward(times, points, 0);
 	}
 
 }
