@@ -223,10 +223,50 @@ public class Recursion {
 		ints[two] = value;
 	}
 
+	public static int[] dvide(int[] ints, int pivot) {
+		if (ints.length == 0 || ints.length == 1) {
+			return ints;
+		}
+		int numLess = 0;
+		int numGreater = 0;
+		int[] lessThan = new int[numLess];
+		int[] greaterThan = new int[numGreater];
+		for (int i = 0; i < ints.length; i++) {
+			if (ints[i] > ints[pivot]) {
+				numGreater++;
+				greaterThan[numGreater - 1] = ints[i];
+			} else {
+				numLess++;
+				lessThan[numLess - 1] = ints[i];
+			}
+		}
+		int leftPivot = lessThan.length / 2;
+		int rightPivot = greaterThan.length / 2;
+		int[] leftSide = dvide(lessThan, leftPivot);
+		int[] rightSide = dvide(greaterThan, rightPivot);
+		int[] finalArray = new int[ints.length];
+		for (int i = 0; i < finalArray.length; i++) {
+			if (i < leftSide.length) {
+				finalArray[i] = leftSide[i];
+			} else if (i == leftSide.length) {
+				finalArray[i] = ints[pivot];
+			} else {
+				finalArray[i] = rightSide[i - pivot];
+			}
+		}
+		return finalArray;
+
+
+	}
+
 	// Performs a quickSort on the given array of ints
 	// Use the middle element (index n/2) as the pivot
 	// Precondition: you may assume there are NO duplicates!!!
 	public static void quickSort(int[] ints) {
+		int[] toPrint = dvide(ints, ints.length / 2);
+		for (int i = 0; i < toPrint.length; i++) {
+			System.out.println(toPrint[i]);
+		}
 
 	}
 
