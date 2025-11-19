@@ -6,7 +6,10 @@ public class Recursion {
 	// Prints the value of every node in the singly linked list with the given head,
 	// but in reverse
 	public static void printListInReverse(ListNode head) {
-		ListNode current = new ListNode(head);
+		if (head == null) {
+			return;
+		}
+		ListNode current = head;
 		if (current.getNext() == null) {
 			System.out.println(current.getValue());
 		} else {
@@ -24,8 +27,8 @@ public class Recursion {
 	// Trying to infect outside the confines of the grid also has no effect
 	// Precondition: grid has no null entries
 	public static void infect(String[][] grid, int r, int c) {
-		if (r < 0 || r > grid.length || c < 0 || c > grid[0].length) {
-			throw new IndexOutOfBoundsException();
+		if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length) {
+			return;
 		}
 		if (grid[r][c] == "vaccinated" || grid[r][c] == "infected") {
 			return;
@@ -50,7 +53,7 @@ public class Recursion {
 		if (n == 1 || n == 2) {
 			return n + 1;
 		} else {
-			return countNonConsecutiveSubsets(n - 1) + countNonConsecutiveSubsets(n + 2);
+			return countNonConsecutiveSubsets(n - 1) + countNonConsecutiveSubsets(n - 2);
 		}
 	}
 
@@ -59,10 +62,13 @@ public class Recursion {
 	// Jumping 1-1-2 is considered different than jumping 1-2-1
 	// Precondition: n > 0
 	public static long countWaysToJumpUpStairs(int n) {
-		if (n == 1) {
-			return 1;
+		if (n == 1 || n == 2) {
+			return n;
+		} else if (n == 3) {
+			return n + 1;
 		} else {
-			return (n - 1) + countWaysToJumpUpStairs(n - 1);
+			return countWaysToJumpUpStairs(n - 1) + countWaysToJumpUpStairs(n - 2)
+					+ countWaysToJumpUpStairs(n - 3);
 		}
 	}
 
@@ -106,12 +112,15 @@ public class Recursion {
 
 	public static void printSubsets(String str) {
 		ArrayList<String> printing = createSubsets(str);
-		StringBuilder thing = new StringBuilder();
-		for (int i = 0; i < printing.size() - 1; i++) {
-			thing.append("\"" + printing.get(i) + "\", ");
+		// StringBuilder thing = new StringBuilder();
+		for (int i = 0; i < printing.size(); i++) {
+			System.out.println(printing.get(i));
 		}
-		thing.append("\"" + printing.get(printing.size() - 1) + "\"");
-		System.out.println(thing);
+		// for (int i = 0; i < printing.size() - 1; i++) {
+		// thing.append("" + printing.get(i) + "");
+		// }
+		// thing.append("" + printing.get(printing.size() - 1) + "");
+		// System.out.println(thing);
 	}
 
 	// List contains a single String to start.
@@ -121,9 +130,12 @@ public class Recursion {
 	// "cab", "cba"
 	// Order is your choice
 
-	// creatPerm takes in a string and creates all permutations of it. It does this through
-	// recursion, repeating itself until the length of the string parameter is 2. It repeats, taking
-	// the string without the first letter, then checking
+	// This method generates all permutations of a given string using recursion. For strings of
+	// length 1 or 2, it directly returns the only possible permutations. For longer strings, it
+	// recursively computes all permutations of the substring that excludes the first character.
+	// Then, for each of these smaller permutations, it inserts the original first character into
+	// every possible position within that permutation building each unique combination. All these
+	// smaller arrays are then combined into one larger array and returned.
 
 	public static ArrayList<String> createPerm(String str) {
 		ArrayList<String> list = new ArrayList<String>();
@@ -136,8 +148,8 @@ public class Recursion {
 			return list;
 		}
 		ArrayList<String> perms = createPerm(str.substring(1));
-		for (int i = 0; i < perms.get(0).length(); i++) {
-			for (int j = 0; j <= str.length() - 1; j++) {
+		for (int i = 0; i < perms.size(); i++) {
+			for (int j = 0; j <= perms.get(i).length(); j++) {
 				String adding = "";
 				if (j == 0) {
 					adding = str.substring(0, 1) + perms.get(i);
@@ -156,24 +168,44 @@ public class Recursion {
 
 	public static void printPermutations(String str) {
 		ArrayList<String> printing = createPerm(str);
-		StringBuilder thing = new StringBuilder();
-		for (int i = 0; i < printing.size() - 1; i++) {
-			thing.append("\"" + printing.get(i) + "\", ");
+		// StringBuilder thing = new StringBuilder();
+		for (int i = 0; i < printing.size(); i++) {
+			System.out.println(printing.get(i));
 		}
-		thing.append("\"" + printing.get(printing.size() - 1) + "\"");
-		System.out.println(thing);
+		// for (int i = 0; i < printing.size() - 1; i++) {
+		// thing.append("" + printing.get(i) + "");
+		// }
+		// thing.append("" + printing.get(printing.size() - 1) + "");
+		// System.out.println(thing);
 	}
 
 
-	// Combine takes two array lists and combines them into one array list
+	// Combine takes two array lists and combines them into one. Then it copies the items from the
+	// original lists into the new larger list. It makes sure that the items from the first list are
+	// in the same order when copied over, and does the same for the second list. The second list is
+	// placed after the first list.
 
 	public static ArrayList<Integer> combine(ArrayList<Integer> first, ArrayList<Integer> second) {
 		ArrayList<Integer> combined = new ArrayList<Integer>(first.size() + second.size());
-		for (int i = 0; i < first.size() - 1; i++) {
-			combined.set(i, first.get(i));
+
+		int firstIndex = 0;
+		int secondIndex = 0;
+
+		while (firstIndex < first.size() && secondIndex < second.size()) {
+			if (first.get(firstIndex) < second.get(secondIndex)) {
+				combined.add(first.get(firstIndex));
+				firstIndex++;
+			} else {
+				combined.add(second.get(secondIndex));
+				secondIndex++;
+			}
 		}
-		for (int i = 0; i < second.size() - 1; i++) {
-			combined.set((first.size() + i), second.get(i));
+
+		for (int i = firstIndex; i < first.size(); i++) {
+			combined.add(first.get(i));
+		}
+		for (int i = secondIndex; i < second.size(); i++) {
+			combined.add(second.get(i));
 		}
 		return combined;
 	}
@@ -194,8 +226,6 @@ public class Recursion {
 		for (int i = 0; i < ints.length; i++) {
 			if (i < ints.length / 2) {
 				left[i] = ints[i];
-			} else if (i == ints.length / 2) {
-				right[i] = ints[i];
 			} else {
 				right[i - ints.length / 2] = ints[i];
 			}
@@ -211,39 +241,54 @@ public class Recursion {
 			secondHalf.add(right[i]);
 		}
 		ArrayList<Integer> finalList = combine(firstHalf, secondHalf);
-		for (int i = 0; i < left.length; i++) {
+		for (int i = 0; i < finalList.size(); i++) {
 			ints[i] = finalList.get(i);
 		}
 	}
 
 
-	public static void swap(int[] ints, int one, int two) {
-		int value = ints[one];
-		ints[one] = ints[two];
-		ints[two] = value;
-	}
+	// The divide method takes in a pivot index and then divides a list into two smaller list. One
+	// list contains all the vlaues that are less than the pivot value, and the other contains all
+	// those that are greater. It does this recursively until each list only has one item in it, and
+	// then all the original items will be sorted.
 
-	public static int[] dvide(int[] ints, int pivot) {
+	public static int[] divide(int[] ints, int pivot) {
 		if (ints.length == 0 || ints.length == 1) {
 			return ints;
 		}
 		int numLess = 0;
 		int numGreater = 0;
-		int[] lessThan = new int[numLess];
-		int[] greaterThan = new int[numGreater];
 		for (int i = 0; i < ints.length; i++) {
-			if (ints[i] > ints[pivot]) {
-				numGreater++;
-				greaterThan[numGreater - 1] = ints[i];
-			} else {
-				numLess++;
-				lessThan[numLess - 1] = ints[i];
+			if (i != pivot) {
+				if (ints[i] > ints[pivot]) {
+					numGreater++;
+				} else {
+					numLess++;
+				}
 			}
 		}
+
+		int[] lessThan = new int[numLess];
+		int[] greaterThan = new int[numGreater];
+		int lessIndex = 0;
+		int greaterIndex = 0;
+
+		for (int i = 0; i < ints.length; i++) {
+			if (i != pivot) {
+				if (ints[i] > ints[pivot]) {
+					greaterThan[greaterIndex] = ints[i];
+					greaterIndex++;
+				} else {
+					lessThan[lessIndex] = ints[i];
+					lessIndex++;
+				}
+			}
+		}
+
 		int leftPivot = lessThan.length / 2;
 		int rightPivot = greaterThan.length / 2;
-		int[] leftSide = dvide(lessThan, leftPivot);
-		int[] rightSide = dvide(greaterThan, rightPivot);
+		int[] leftSide = divide(lessThan, leftPivot);
+		int[] rightSide = divide(greaterThan, rightPivot);
 		int[] finalArray = new int[ints.length];
 		for (int i = 0; i < finalArray.length; i++) {
 			if (i < leftSide.length) {
@@ -251,7 +296,7 @@ public class Recursion {
 			} else if (i == leftSide.length) {
 				finalArray[i] = ints[pivot];
 			} else {
-				finalArray[i] = rightSide[i - pivot];
+				finalArray[i] = rightSide[i - leftSide.length - 1];
 			}
 		}
 		return finalArray;
@@ -263,14 +308,22 @@ public class Recursion {
 	// Use the middle element (index n/2) as the pivot
 	// Precondition: you may assume there are NO duplicates!!!
 	public static void quickSort(int[] ints) {
-		int[] toPrint = dvide(ints, ints.length / 2);
+		int[] toPrint = divide(ints, ints.length / 2);
+		for (int i = 0; i < ints.length; i++) {
+			ints[i] = toPrint[i];
+		}
 		for (int i = 0; i < toPrint.length; i++) {
 			System.out.println(toPrint[i]);
 		}
 
 	}
 
-	//
+	// solveOnMiddle helps to solve the tower of hanoi. It moves the top disk of the starting post
+	// to the free post, then moves the remaining disks on starting post to the end post, then moves
+	// the disks from the free post to the end post. This follows the rules of the tower of hanoi
+	// game and solves the puzzle in the optimal amount of moves.
+
+
 	public static void solveOnMiddle(int startingDisks, int start, int end, int free) {
 		if (startingDisks == 1) {
 			System.out.println("" + start + " -> " + end + "");
@@ -300,6 +353,13 @@ public class Recursion {
 		System.out.println("0 -> 2");
 		solveOnMiddle(startingDisks - 1, 1, 2, 0);
 	}
+
+
+	// This method finds the maximum reward possible from the given "scavenger hunt". A tally of the
+	// largest amount of points is kept, and this method searches through the arrays of times and
+	// points to determine what the max reward is. When it finds a large point value, it looks 4
+	// time slots ahead to check if that value is larger. It continues to do this until the largest
+	// point value is determined
 
 	public static int maxReward(int[] times, int[] points, int index) {
 		if (times.length - index - 1 == 0) {
