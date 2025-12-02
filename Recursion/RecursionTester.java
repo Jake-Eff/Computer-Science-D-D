@@ -33,11 +33,11 @@ public class RecursionTester {
         System.out.println();
 
         System.out.println("=== TEST subsets ===");
-        Recursion.printSubsets("hmu");
+        Recursion.printSubsets("abcde");
         System.out.println();
 
         System.out.println("=== TEST permutations ===");
-        Recursion.printPermutations("hmu");
+        Recursion.printPermutations("abcde");
         System.out.println();
 
         System.out.println("=== TEST combine ===");
