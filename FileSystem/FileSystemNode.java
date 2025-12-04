@@ -1,6 +1,6 @@
 /**
- * Represents a node in a file system tree.
- * Both folders and files share a name and a reference to their parent folder.
+ * Represents a node in a file system tree. Both folders and files share a name and a reference to
+ * their parent folder.
  */
 public abstract class FileSystemNode {
 
@@ -13,8 +13,7 @@ public abstract class FileSystemNode {
     }
 
     /**
-     * Returns the folder that directly contains this node,
-     * or null if this is the root.
+     * Returns the folder that directly contains this node, or null if this is the root.
      */
     public FolderNode getParent() {
         return parent;
@@ -28,45 +27,60 @@ public abstract class FileSystemNode {
     }
 
     /**
-     * Indicates whether this node represents a folder.
-     * Implementations in subclasses should return true for folders and false for files.
+     * Indicates whether this node represents a folder. Implementations in subclasses should return
+     * true for folders and false for files.
      */
     public abstract boolean isFolder();
 
     /**
-     * Computes the number of edges from the root node down to this node.
-     * The root has value 0, its children have value 1, and so on.
+     * Computes the number of edges from the root node down to this node. The root has value 0, its
+     * children have value 1, and so on.
      */
     public int getDepth() {
-        // TODO: compute depth by following parent references up to the root
-        return 0;
+        FileSystemNode current = this;
+        int depth = 0;
+        while (current.getParent() != current) {
+            depth++;
+            current = current.getParent();
+        }
+        return depth;
     }
 
     /**
-     * Computes the longest downward distance from this node to any descendant node.
-     * Leaf nodes (files or empty folders) should have value 0.
+     * Computes the longest downward distance from this node to any descendant node. Leaf nodes
+     * (files or empty folders) should have value 0.
      */
     public abstract int getHeight();
 
     /**
-     * Computes the total size contributed by this node and all descendants.
-     * For a file this is its own size; for a folder this is the sum of all contained files.
+     * Computes the total size contributed by this node and all descendants. For a file this is its
+     * own size; for a folder this is the sum of all contained files.
      */
     public abstract int getSize();
 
     /**
-     * Counts how many nodes are included when starting at this node
-     * and following all child links recursively, including this node itself.
+     * Counts how many nodes are included when starting at this node and following all child links
+     * recursively, including this node itself.
      */
     public abstract int getTotalNodeCount();
 
     /**
-     * Builds a full path for this node from the root, using "/" as a separator.
-     * Folders may choose to represent themselves with a trailing "/" if desired.
+     * Builds a full path for this node from the root, using "/" as a separator. Folders may choose
+     * to represent themselves with a trailing "/" if desired.
      */
     @Override
     public String toString() {
-        // TODO: build a string like "/root/folder/subfolder/file"
-        return null;
+        StringBuilder str = new StringBuilder();
+        if (this.getDepth() == 0) {
+            str.append("/");
+            str.append(this.getName());
+            return str.toString();
+        }
+        str.append("/");
+        str.append(this.getParent().toString());
+        str.append("/");
+        str.append(this.getName());
+
+        return str.toString();
     }
 }

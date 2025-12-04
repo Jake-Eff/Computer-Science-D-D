@@ -17,7 +17,11 @@ public class FolderNode extends FileSystemNode {
 
     @Override
     public boolean isFolder() {
-        return true;
+        if (this instanceof FolderNode) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -51,7 +55,7 @@ public class FolderNode extends FileSystemNode {
      * new file is added and true is returned.
      */
     public boolean addFile(String fileName, int size) {
-        if(getChildByName(fileName) != null){
+        if (getChildByName(fileName) != null) {
             return false;
         }
         children.add(new FileNode(getParent(), fileName, size));
@@ -64,7 +68,7 @@ public class FolderNode extends FileSystemNode {
      * new folder is added and true is returned.
      */
     public boolean addFolder(String folderName) {
-        if(getChildByName(folderName) != null){
+        if (getChildByName(folderName) != null) {
             return false;
         }
         children.add(new FolderNode(folderName, getParent()));
@@ -76,16 +80,16 @@ public class FolderNode extends FileSystemNode {
      * When a match is found, its full path can be printed by the caller using toString().
      */
     public boolean containsNameRecursive(String searchName) {
-        if(this.getName().equals(searchName)){
+        if (this.getName().equals(searchName)) {
             this.toString();
             return true;
         }
-        for(FileSystemNode child : children){
-            if(child.isFolder()){
+        for (FileSystemNode child : children) {
+            if (child.isFolder()) {
                 FolderNode f = (FolderNode) child;
                 f.containsNameRecursive(searchName);
-            } else{
-                if (child.getName().equals(searchName)){
+            } else {
+                if (child.getName().equals(searchName)) {
                     child.toString();
                     return true;
                 }
@@ -96,18 +100,50 @@ public class FolderNode extends FileSystemNode {
 
     @Override
     public int getHeight() {
-       
+        List<FileSystemNode> children = this.getChildren();
+        int greatestHeight = 0;
+        if (!this.isFolder() || children.size() == 0) {
+            return 0;
+        } else if (this.isFolder()) {
+            for (int i = 0; i < children.size(); i++) {
+                int thisChildHeight = children.get(i).getHeight();
+                if (thisChildHeight > greatestHeight) {
+                    greatestHeight = thisChildHeight;
+                }
+            }
+        }
+        return greatestHeight + 1;
     }
 
     @Override
     public int getSize() {
-        // TODO: sum the sizes of all files contained in this directory and its descendants
-        return 0;
+        List<FileSystemNode> children = this.getChildren();
+        int size = 0;
+        if (!this.isFolder()) {
+            return this.getSize();
+        } else if (children.size() == 0) {
+            return 0;
+        } else if (this.isFolder()) {
+            for (int i = 0; i < children.size(); i++) {
+                size += children.get(i).getSize();
+            }
+        }
+        return size;
     }
 
     @Override
     public int getTotalNodeCount() {
-        // TODO: count this directory plus all descendant files and folders
-        return 0;
+        List<FileSystemNode> children = this.getChildren();
+        int total = 0;
+        if (!this.isFolder()) {
+            return this.getSize();
+        } else if (children.size() == 0) {
+            return 1;
+        } else if (this.isFolder()) {
+            for (int i = 0; i < children.size(); i++) {
+                total += children.get(i).getTotalNodeCount();
+            }
+        }
+        return total + 1;
     }
 }
