@@ -108,7 +108,6 @@ public class Navigator {
      * Creates a new file inside the current directory with a given name and size.
      */
     private void touch(String[] args) {
-        // TODO: read file name and size from args and delegate to currentDirectory.addFile(...)
         List<FileSystemNode> children = currentDirectory.getChildren();
         for (int i = 0; i < children.size(); i++) {
             if (children.get(i).getName().toLowerCase().equals(args[0].toLowerCase())) {
@@ -126,14 +125,32 @@ public class Navigator {
      * their paths.
      */
     private void find(String[] args) {
-        // TODO: use recursive search starting at currentDirectory
+        if (currentDirectory.getName().equals(args[0])) {
+            currentDirectory.toString();
+
+            if (currentDirectory.getChildren().size() == 0 || !currentDirectory.isFolder()) {
+                return;
+            }
+
+            List<FileSystemNode> children = currentDirectory.getChildren();
+            for (FileSystemNode child : children) {
+                if (child.isFolder()) {
+                    currentDirectory = (FolderNode) child;
+                    find(args);
+                } else {
+                    if (child.getName().equals(args[0])) {
+                        child.toString();
+                    }
+                }
+            }
+        }
     }
 
     /**
      * Prints the absolute path of the current directory, from the root to this node.
      */
     private void pwd(String[] args) {
-        // TODO: use currentDirectory.toString() or similar path builder
+        System.out.println(currentDirectory.toString());
     }
 
     /**
@@ -149,14 +166,14 @@ public class Navigator {
      * subdirectories.
      */
     private void count(String[] args) {
-        // TODO: call a counting method on currentDirectory
+        System.out.println(currentDirectory.getTotalNodeCount());
     }
 
     /**
      * Prints the total size of all files reachable from the current directory.
      */
     private void size(String[] args) {
-        // TODO: call a size-calculation method on currentDirectory
+        System.out.println(currentDirectory.getSize());
     }
 
     /**
@@ -164,7 +181,7 @@ public class Navigator {
      * directory down to this directory.
      */
     private void depth(String[] args) {
-        // TODO: use a depth method on currentDirectory
+        System.out.println(currentDirectory.getDepth());
     }
 
     /**
@@ -172,7 +189,7 @@ public class Navigator {
      * this directory to any file or subdirectory beneath it. An empty directory has value 0.
      */
     private void height(String[] args) {
-        // TODO: use a height method on currentDirectory
+        System.out.println(currentDirectory.getHeight());
     }
 
     /**
@@ -247,3 +264,4 @@ public class Navigator {
         }
     }
 }
+
