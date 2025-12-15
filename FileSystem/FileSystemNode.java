@@ -73,7 +73,10 @@ public abstract class FileSystemNode {
         StringBuilder str = new StringBuilder();
         if (this.getDepth() == 0) {
             str.append(this.getName());
-        } else {
+        } else if(this.getParent().getParent() == null){
+            str.append(this.getParent().toString());
+            str.append(this.getName());
+        } else{
             str.append(this.getParent().toString());
             str.append("/");
             str.append(this.getName());

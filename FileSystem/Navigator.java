@@ -80,10 +80,13 @@ public class Navigator {
      * typical file system listings.
      */
     private void ls(String[] args) {
-        cd(args);
         List<FileSystemNode> children = currentDirectory.getChildren();
         for (FileSystemNode child : children) {
-            System.out.println(child.getName());
+            if (child.isFolder()) {
+                System.out.println(child.getName() + "/");
+            } else {
+                System.out.println(child.getName());
+            }
         }
     }
 
@@ -125,23 +128,23 @@ public class Navigator {
      * their paths.
      */
     private void find(String[] args) {
-        if (currentDirectory.getName().equals(args[0])) {
-            currentDirectory.toString();
+        finder(args, currentDirectory);
+    }
 
-            if (currentDirectory.getChildren().size() == 0 || !currentDirectory.isFolder()) {
+    public void finder(String[] args, FileSystemNode current) {
+        if (current.getName().equals(args[0])) {
+            System.out.println(current.toString());
+        }
+        if (!current.isFolder()) {
+            return;
+        } 
+        if(current.isFolder()){
+            FolderNode currentFolder = (FolderNode) current;
+            if (currentFolder.getChildren().size() == 0) {
                 return;
             }
-
-            List<FileSystemNode> children = currentDirectory.getChildren();
-            for (FileSystemNode child : children) {
-                if (child.isFolder()) {
-                    currentDirectory = (FolderNode) child;
-                    find(args);
-                } else {
-                    if (child.getName().equals(args[0])) {
-                        child.toString();
-                    }
-                }
+            for (FileSystemNode child : currentFolder.getChildren()) {
+                finder(args, child);
             }
         }
     }
@@ -159,14 +162,36 @@ public class Navigator {
      */
     private void tree(String[] args) {
         // TODO: implement tree-style printing with indentation and branch characters
+        printTree(currentDirectory, currentDirectory.getDepth());
+
     }
+
+    private void printTree(FolderNode current, int depth) {
+        for (FileSystemNode child : current.getChildren()) {
+            if (depth > 0) {
+                System.out.print("|");
+            }
+            for (int i = 0; i < depth; i++) {
+                if (i == 0) {
+                    System.out.print("   ");
+                } else {
+                    System.out.print("    ");
+                }
+            }
+            System.out.println("|---" + child.getName());
+            if (child.isFolder()) {
+                printTree((FolderNode) child, depth + 1);
+            }
+        }
+    }
+
 
     /**
      * Prints how many nodes (files and folders) exist in the current directory and all of its
      * subdirectories.
      */
     private void count(String[] args) {
-        System.out.println(currentDirectory.getTotalNodeCount());
+        System.out.println(currentDirectory.getTotalNodeCount() - 1);
     }
 
     /**

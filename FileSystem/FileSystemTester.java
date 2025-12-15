@@ -42,5 +42,8 @@ public class FileSystemTester {
         int heightRoot = root.getHeight();
         int sizeRoot = root.getSize();
         int totalNodesRoot = root.getTotalNodeCount();
+
+        Navigator n = new Navigator(tree);
+
     }
 }
