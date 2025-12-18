@@ -1,12 +1,11 @@
-import java.util.Collections;
+import java.util.Arrays;
 
 public class SortedArrayList<E extends Comparable<E>> extends MyArrayList<E> {
 
 
 	@Override
 	public boolean contains(E obj) {
-		int pos = Utils.binarySearchRecursiveHelper(super.internalArray, obj, 0,
-				super.internalArray.length - 1);
+		int pos = Arrays.binarySearch(internalArray, 0, objectCount, obj);
 		if(pos != -1){
 			return true;
 		}
@@ -16,25 +15,30 @@ public class SortedArrayList<E extends Comparable<E>> extends MyArrayList<E> {
 	// May not contain more than one of the same object
 	@Override
 	public boolean add(E obj) {
-		if(contains(obj)){
+		if(super.contains(obj)){
 			return false;
 		}
 
-		int pos = Utils.findPlace(super.internalArray, obj, 0, super.internalArray.length - 1);
+		int pos = (Arrays.binarySearch(super.internalArray, 0, objectCount, obj) * -1) - 1;
 		super.add(pos, obj);
 		return true;
 	}
 
 	@Override
 	public boolean remove(E obj) {
-		return super.remove(obj);
+		int pos = Arrays.binarySearch(internalArray, 0, objectCount, obj);
+		if(pos == -1){
+			return false;
+		}
+		super.remove(pos);
+		return true;
 	}
 
 	public E min() {
-		return super.internalArray[0];
+		return get(0);
 	}
 
 	public E max() {
-		return super.internalArray[internalArray.length - 1];
+		return get(objectCount - 1);
 	}
 }

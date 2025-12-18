@@ -7,6 +7,10 @@ public class SortedArrayListTester {
         bruh.add("silverback");
         bruh.add("zack");
         bruh.add("jackson");
-        bruh.toString();
+        System.out.println(bruh.toString());
+        bruh.remove("orangutang");
+        System.out.println(bruh.toString());
+        System.out.println(bruh.max());
+        System.out.println(bruh.min());
     }
 }
