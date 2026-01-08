@@ -4,6 +4,7 @@ public class MyBSTTester {
         newThing.add(10);
         newThing.add(5);
         newThing.add(6);
+        newThing.add(4);
         newThing.add(21);
         newThing.add(10);
         System.out.println(newThing.toString());

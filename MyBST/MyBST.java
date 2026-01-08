@@ -39,7 +39,7 @@ public class MyBST<E extends Comparable<E>> {
 
 	// Returns true if this BST contains value; otherwise returns false.
 	public boolean contains(E value) {
-		return false;
+		return containsHelper(value, root);
 	}
 
 
@@ -48,26 +48,27 @@ public class MyBST<E extends Comparable<E>> {
 			root = new BinaryNode<E>(value);
 			return true;
 		}
-		if (value.compareTo(root.getValue()) == 0) {
+		if (value.compareTo(current.getValue()) == 0) {
 			return false;
-		} else if (value.compareTo(root.getValue()) > 0) {
+		} else if (value.compareTo(current.getValue()) > 0) {
 			if (current.hasRight()) {
-				addHelper(value, current.getRight());
+				return addHelper(value, current.getRight());
 			} else {
 				BinaryNode<E> thing = new BinaryNode<E>(value);
 				current.setRight(thing);
+				thing.setParent(current);
 				return true;
 			}
 		} else {
 			if (current.hasLeft()) {
-				addHelper(value, current.getLeft());
+				return addHelper(value, current.getLeft());
 			} else {
 				BinaryNode<E> thing = new BinaryNode<E>(value);
 				current.setLeft(thing);
+				thing.setParent(current);
 				return true;
 			}
 		}
-		return false;
 	}
 
 	// Adds value to this BST, unless this tree already holds value.
@@ -81,7 +82,60 @@ public class MyBST<E extends Comparable<E>> {
 	// If removing a node with two children: replace it with the
 	// largest node in the right subtree
 	public boolean remove(E value) {
-		return false;
+		if (!this.contains(value)) {
+			return false;
+		}
+
+		return removeHelper(value, find(value, root));
+	}
+
+	public boolean removeHelper(E value, BinaryNode<E> toRemove) {
+		if (toRemove.isLeaf()) {
+			if (toRemove.getParent().getValue().compareTo(toRemove.getValue()) > 0) {
+				toRemove.getParent().setLeft(null);
+			} else {
+				toRemove.getParent().setRight(null);
+			}
+		} else if (toRemove.hasRight()) {
+			BinaryNode<E> thing = minFromSpot(toRemove);
+			toRemove.setValue(thing.getValue());
+		} else {
+			BinaryNode<E> thing = maxFromSpot(toRemove);
+			toRemove.setValue(thing.getValue());
+		}
+	}
+
+	public BinaryNode<E> find(E value, BinaryNode<E> current) {
+		if (value.compareTo(root.getValue()) == 0) {
+			return current;
+		} else if (value.compareTo(root.getValue()) > 0) {
+			if (current.hasRight()) {
+				containsHelper(value, current.getRight());
+			} else {
+				return null;
+			}
+		} else {
+			if (current.hasLeft()) {
+				containsHelper(value, current.getLeft());
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	public BinaryNode<E> maxFromSpot(BinaryNode<E> current) {
+		while (current.hasRight()) {
+			current = current.getRight();
+		}
+		return current;
+	}
+
+	public BinaryNode<E> minFromSpot(BinaryNode<E> current) {
+		while (current.hasLeft()) {
+			current = current.getLeft();
+		}
+		return current;
 	}
 
 	// Returns the minimum in the tree
@@ -91,6 +145,22 @@ public class MyBST<E extends Comparable<E>> {
 			current = current.getLeft();
 		}
 		return current.getValue();
+	}
+
+	public BinaryNode<E> minNode() {
+		BinaryNode<E> current = root;
+		while (current.hasLeft()) {
+			current = current.getLeft();
+		}
+		return current;
+	}
+
+	public BinaryNode<E> maxNode() {
+		BinaryNode<E> current = root;
+		while (current.hasRight()) {
+			current = current.getRight();
+		}
+		return current;
 	}
 
 	// Returns the maximum in the tree.
@@ -103,9 +173,12 @@ public class MyBST<E extends Comparable<E>> {
 	}
 
 
-	public String toStringHelper(BinaryNode<E> current, StringBuilder currentString) {
+	public StringBuilder toStringHelper(BinaryNode<E> current, StringBuilder currentString) {
 		if (current.getValue().compareTo(min()) == 0) {
 			currentString.append(current.getValue());
+			if (current.hasRight()) {
+				toStringHelper(current.getRight(), currentString);
+			}
 		} else {
 			if (current.hasLeft()) {
 				toStringHelper(current.getLeft(), currentString);
@@ -115,7 +188,7 @@ public class MyBST<E extends Comparable<E>> {
 				toStringHelper(current.getRight(), currentString);
 			}
 		}
-		return currentString.toString();
+		return currentString;
 	}
 
 	// Returns a bracket-surrounded, comma separated list of the contents of the nodes, in order
