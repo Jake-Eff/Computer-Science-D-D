@@ -77,6 +77,7 @@ public class MyBST<E extends Comparable<E>> {
 		return addHelper(value, root);
 	}
 
+
 	// Removes value from this BST. Returns true if value has been
 	// found and removed; otherwise returns false.
 	// If removing a node with two children: replace it with the
@@ -86,35 +87,76 @@ public class MyBST<E extends Comparable<E>> {
 			return false;
 		}
 
-		return removeHelper(value, find(value, root));
+		return removeHelper(find(value, root));
 	}
 
-	public boolean removeHelper(E value, BinaryNode<E> toRemove) {
+	public boolean removeHelper(BinaryNode<E> toRemove) {
 		if (toRemove.isLeaf()) {
+			if(toRemove.getParent() == null){
+				root = null;
+			}
 			if (toRemove.getParent().getValue().compareTo(toRemove.getValue()) > 0) {
 				toRemove.getParent().setLeft(null);
 			} else {
 				toRemove.getParent().setRight(null);
 			}
-		} else if (toRemove.hasRight()) {
-			BinaryNode<E> thing = minFromSpot(toRemove);
-			toRemove.setValue(thing.getValue());
-		} else {
+		}
+		if (!toRemove.hasRight()) {
 			BinaryNode<E> thing = maxFromSpot(toRemove);
 			toRemove.setValue(thing.getValue());
+			if (thing.hasLeft()) {
+				BinaryNode<E> heightUpdate = thing.getLeft();
+				if (thing.equals(toRemove.getLeft())) {
+					thing.getLeft().setParent(toRemove);
+					toRemove.setLeft(thing.getLeft());
+				} else {
+					thing.getParent().setRight(thing.getLeft());
+					thing.getLeft().setParent(thing.getParent());
+				}
+				subtractHeight(heightUpdate);
+			} else {
+				removeHelper(thing);
+			}
+		} else {
+			BinaryNode<E> thing = minFromSpot(toRemove);
+			toRemove.setValue(thing.getValue());
+			if (thing.hasRight()) {
+				BinaryNode<E> heightUpdate = thing.getRight();
+				if (thing.equals(toRemove.getRight())) {
+					thing.getRight().setParent(toRemove);
+					toRemove.setRight(thing.getRight());
+				} else {
+					thing.getParent().setLeft(thing.getRight());
+					thing.getRight().setParent(thing.getParent());
+				}
+				subtractHeight(heightUpdate);
+			} else {
+				removeHelper(thing);
+			}
 		}
+		return true;
+	}
+
+	public void subtractHeight(BinaryNode<E> start) {
+		if (start == null) {
+			return;
+		}
+		start.setHeight(start.getHeight() - 1);
+		subtractHeight(start.getLeft());
+		subtractHeight(start.getRight());
 	}
 
 	public BinaryNode<E> find(E value, BinaryNode<E> current) {
-		if (value.compareTo(root.getValue()) == 0) {
-			return current;
-		} else if (value.compareTo(root.getValue()) > 0) {
+		// if (value.compareTo(current.getValue()) == 0) {
+		// 	return current;
+		if (value.compareTo(current.getValue()) > 0) {
 			if (current.hasRight()) {
 				containsHelper(value, current.getRight());
 			} else {
 				return null;
 			}
-		} else {
+
+		} else if () {
 			if (current.hasLeft()) {
 				containsHelper(value, current.getLeft());
 			} else {
