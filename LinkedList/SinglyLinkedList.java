@@ -4,7 +4,7 @@ import javax.swing.LayoutFocusTraversalPolicy;
 import org.w3c.dom.Node;
 
 public class SinglyLinkedList<E> {
-	private ListNode<E> head;
+	public ListNode<E> head;
 	private ListNode<E> tail;
 	private int nodeCount;
 

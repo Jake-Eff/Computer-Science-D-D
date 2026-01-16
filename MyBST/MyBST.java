@@ -155,14 +155,12 @@ public class MyBST<E extends Comparable<E>> {
 			if (current.hasRight()) {
 				return find(value, current.getRight());
 			} else {
-				System.out.println("Value not in list.");
 				return null;
 			}
 		} else if (value.compareTo(current.getValue()) < 0) {
 			if (current.hasLeft()) {
 				return find(value, current.getLeft());
 			} else {
-				System.out.println("Value not in list.");
 				return null;
 			}
 		}
