@@ -22,7 +22,7 @@ public class MyStack<E> extends SinglyLinkedList<E> {
     }
 
     public E pop() {
-        if (isEmpty) {
+        if (empty()) {
             throw new EmptyStackException();
         }
         head = head.getNext();
@@ -31,9 +31,13 @@ public class MyStack<E> extends SinglyLinkedList<E> {
     }
 
     public E peek() {
-        if (isEmpty) {
+        if (empty()) {
             throw new EmptyStackException();
         }
         return head.getValue();
+    }
+
+    public boolean empty() {
+        return isEmpty;
     }
 }
