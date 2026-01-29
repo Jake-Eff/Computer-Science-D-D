@@ -44,7 +44,7 @@ public class CookieMonster {
 
 	// You may find it VERY helpful to write this helper method. Or not!
 	private boolean validPoint(int row, int col) {
-		if (cookieGrid[row][col] == -1) {
+		if (row >= numRows || row < 0 || col >= numCols || col < 0 || cookieGrid[row][col] == -1) {
 			return false;
 		}
 		return true;
@@ -95,7 +95,33 @@ public class CookieMonster {
 	/* From any given position, always add the path right before adding the path down */
 	public int queueCookies() {
 		ArrayDeque<OrphanScout> newQueue = new ArrayDeque<OrphanScout>();
-		return 0;
+		int row = 0;
+		int col = 0;
+		OrphanScout bebe1 = new OrphanScout(row, col, cookieGrid[0][0]);
+		newQueue.add(bebe1);
+		int newCount = 0;
+		while (!(newQueue.peek().getEndingRow() == numRows - 1
+				&& newQueue.peek().getEndingCol() == numCols - 1)) {
+			row = newQueue.peek().getEndingRow();
+			col = newQueue.peek().getEndingCol();
+			if (validPoint(row + 1, col)) {
+				newCount = newQueue.peek().getCookiesDiscovered() + cookieGrid[row + 1][col];
+				newQueue.add(new OrphanScout(row + 1, col, newCount));
+			}
+			if (validPoint(row, col + 1)) {
+				newCount = newQueue.peek().getCookiesDiscovered() + cookieGrid[row][col + 1];
+				newQueue.add(new OrphanScout(row, col + 1, newCount));
+			}
+			newQueue.remove();
+		}
+		int cookies = 0;
+		while (newQueue.peek() != null) {
+			int current = newQueue.remove().getCookiesDiscovered();
+			if (current > cookies) {
+				cookies = current;
+			}
+		}
+		return cookies;
 	}
 
 
@@ -105,8 +131,36 @@ public class CookieMonster {
 	 */
 	/* From any given position, always add the path right before adding the path down */
 	public int stackCookies() {
-		// CODE THIS
-		return 0;
+		Stack<OrphanScout> newStack = new Stack<OrphanScout>();
+		int row = 0;
+		int col = 0;
+		OrphanScout bebe1 = new OrphanScout(row, col, cookieGrid[0][0]);
+		newStack.push(bebe1);
+		int newCount = 0;
+		while (!(newStack.peek().getEndingRow() == numRows - 1
+				&& newStack.peek().getEndingCol() == numCols - 1)) {
+			row = newStack.peek().getEndingRow();
+			col = newStack.peek().getEndingCol();
+			OrphanScout rightKid = new OrphanScout(0, 0, 0);
+			OrphanScout downKid = new OrphanScout(0, 0, 0);
+			if (validPoint(row + 1, col)) {
+				newCount = newStack.peek().getCookiesDiscovered() + cookieGrid[row + 1][col];
+				newStack.add(new OrphanScout(row + 1, col, newCount));
+			}
+			if (validPoint(row, col + 1)) {
+				newCount = newStack.peek().getCookiesDiscovered() + cookieGrid[row][col + 1];
+				newStack.add(new OrphanScout(row, col + 1, newCount));
+			}
+			newStack.pop();
+		}
+		int cookies = 0;
+		while (newStack.peek() != null) {
+			int current = newStack.pop().getCookiesDiscovered();
+			if (current > cookies) {
+				cookies = current;
+			}
+		}
+		return cookies;
 	}
 
 }
