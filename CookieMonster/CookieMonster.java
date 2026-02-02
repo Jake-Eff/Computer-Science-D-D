@@ -55,12 +55,16 @@ public class CookieMonster {
 	 * cookies attainable.
 	 */
 	public int recursiveCookies() {
+		if (cookieGrid[0][0] == -1) {
+			return 0;
+		}
 		return recursiveCookies(0, 0);
 	}
 
 	// Returns the maximum number of cookies edible starting from (and including)
 	// cookieGrid[row][col]
 	public int recursiveCookies(int row, int col) {
+
 		int rightVal = -1;
 		int downVal = -1;
 		if (row == numRows - 1 && col == numCols - 1) {
@@ -134,33 +138,37 @@ public class CookieMonster {
 		Stack<OrphanScout> newStack = new Stack<OrphanScout>();
 		int row = 0;
 		int col = 0;
+		int maxCookies = 0;
 		OrphanScout bebe1 = new OrphanScout(row, col, cookieGrid[0][0]);
+		int rightCount = 0;
+		int leftCount = 0;
 		newStack.push(bebe1);
-		int newCount = 0;
-		while (!(newStack.peek().getEndingRow() == numRows - 1
-				&& newStack.peek().getEndingCol() == numCols - 1)) {
-			row = newStack.peek().getEndingRow();
-			col = newStack.peek().getEndingCol();
+		while (!(newStack.isEmpty())) {
+			OrphanScout current = newStack.pop();
+			row = current.getEndingRow();
+			col = current.getEndingCol();
+			if (row == numRows - 1 && col == numCols - 1) {
+				if (current.getCookiesDiscovered() > maxCookies) {
+					maxCookies = current.getCookiesDiscovered();
+				}
+			}
 			OrphanScout rightKid = new OrphanScout(0, 0, 0);
 			OrphanScout downKid = new OrphanScout(0, 0, 0);
 			if (validPoint(row + 1, col)) {
-				newCount = newStack.peek().getCookiesDiscovered() + cookieGrid[row + 1][col];
-				newStack.add(new OrphanScout(row + 1, col, newCount));
+				rightCount = current.getCookiesDiscovered() + cookieGrid[row + 1][col];
+				rightKid = new OrphanScout(row + 1, col, rightCount);
 			}
 			if (validPoint(row, col + 1)) {
-				newCount = newStack.peek().getCookiesDiscovered() + cookieGrid[row][col + 1];
-				newStack.add(new OrphanScout(row, col + 1, newCount));
+				leftCount = current.getCookiesDiscovered() + cookieGrid[row][col + 1];
+				downKid = new OrphanScout(row, col + 1, leftCount);
 			}
-			newStack.pop();
-		}
-		int cookies = 0;
-		while (newStack.peek() != null) {
-			int current = newStack.pop().getCookiesDiscovered();
-			if (current > cookies) {
-				cookies = current;
+			if (validPoint(row, col + 1)) {
+				newStack.push(downKid);
+			}
+			if (validPoint(row + 1, col)) {
+				newStack.push(rightKid);
 			}
 		}
-		return cookies;
+		return maxCookies;
 	}
-
 }

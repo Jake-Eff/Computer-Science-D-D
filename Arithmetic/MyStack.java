@@ -25,8 +25,11 @@ public class MyStack<E> extends SinglyLinkedList<E> {
         if (empty()) {
             throw new EmptyStackException();
         }
-        head = head.getNext();
         ListNode<E> newNode = head;
+        if (head.getNext() == null) {
+            isEmpty = true;
+        }
+        head = head.getNext();
         return newNode.getValue();
     }
 
