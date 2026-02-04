@@ -65,30 +65,51 @@ public class CookieMonster {
 	// cookieGrid[row][col]
 	public int recursiveCookies(int row, int col) {
 
-		int rightVal = -1;
-		int downVal = -1;
 		if (row == numRows - 1 && col == numCols - 1) {
 			return cookieGrid[row][col];
 		}
-		if (row + 1 < numRows && validPoint(row + 1, col)) {
-			rightVal = recursiveCookies(row + 1, col);
+
+		int cookies = cookieGrid[row][col];
+		int down = 0;
+		int right = 0;
+
+		if (validPoint(row + 1, col)) {
+			right = recursiveCookies(row + 1, col);
 		}
-		if (col + 1 < numCols && validPoint(row, col + 1)) {
-			downVal = recursiveCookies(row, col + 1);
+
+		if (validPoint(row, col + 1)) {
+			down = recursiveCookies(row, col + 1);
 		}
-		if (rightVal != -1 && downVal != -1) {
-			if (rightVal > downVal) {
-				return rightVal + cookieGrid[row][col];
-			} else {
-				return downVal + cookieGrid[row][col];
-			}
-		} else if (rightVal == -1) {
-			return downVal + cookieGrid[row][col];
-		} else if (downVal == -1) {
-			return rightVal + cookieGrid[row][col];
+
+		if (right >= down) {
+			return cookies + right;
 		} else {
-			return -1;
+			return cookies + down;
 		}
+		// int rightVal = -1;
+		// int downVal = -1;
+		// if (row == numRows - 1 && col == numCols - 1) {
+		// return cookieGrid[row][col];
+		// }
+		// if (row + 1 < numRows && validPoint(row + 1, col)) {
+		// rightVal = recursiveCookies(row + 1, col);
+		// }
+		// if (col + 1 < numCols && validPoint(row, col + 1)) {
+		// downVal = recursiveCookies(row, col + 1);
+		// }
+		// if (rightVal != -1 && downVal != -1) {
+		// if (rightVal > downVal) {
+		// return rightVal + cookieGrid[row][col];
+		// } else {
+		// return downVal + cookieGrid[row][col];
+		// }
+		// } else if (rightVal == -1) {
+		// return downVal + cookieGrid[row][col];
+		// } else if (downVal == -1) {
+		// return rightVal + cookieGrid[row][col];
+		// } else {
+		// return -1;
+		// }
 	}
 
 
@@ -218,42 +239,42 @@ public class CookieMonster {
 		}
 
 		return max;
-	
-		// 	Stack<OrphanScout> newStack = new Stack<OrphanScout>();
-	// 	int row = 0;
-	// 	int col = 0;
-	// 	int maxCookies = 0;
-	// 	OrphanScout bebe1 = new OrphanScout(row, col, cookieGrid[0][0]);
-	// 	int rightCount = 0;
-	// 	int leftCount = 0;
-	// 	newStack.push(bebe1);
-	// 	while (!(newStack.isEmpty())) {
-	// 		OrphanScout current = newStack.pop();
-	// 		row = current.getEndingRow();
-	// 		col = current.getEndingCol();
-	// 		if (row == numRows - 1 && col == numCols - 1) {
-	// 			if (current.getCookiesDiscovered() > maxCookies) {
-	// 				maxCookies = current.getCookiesDiscovered();
-	// 			}
-	// 		}
-	// 		OrphanScout rightKid = new OrphanScout(0, 0, 0);
-	// 		OrphanScout downKid = new OrphanScout(0, 0, 0);
-	// 		if (validPoint(row + 1, col)) {
-	// 			rightCount = current.getCookiesDiscovered() + cookieGrid[row + 1][col];
-	// 			rightKid = new OrphanScout(row + 1, col, rightCount);
-	// 		}
-	// 		if (validPoint(row, col + 1)) {
-	// 			leftCount = current.getCookiesDiscovered() + cookieGrid[row][col + 1];
-	// 			downKid = new OrphanScout(row, col + 1, leftCount);
-	// 		}
-	// 		if (validPoint(row, col + 1)) {
-	// 			newStack.push(downKid);
-	// 		}
-	// 		if (validPoint(row + 1, col)) {
-	// 			newStack.push(rightKid);
-	// 		}
-	// 	}
-	// 	return maxCookies;
-	// }
+
+		// Stack<OrphanScout> newStack = new Stack<OrphanScout>();
+		// int row = 0;
+		// int col = 0;
+		// int maxCookies = 0;
+		// OrphanScout bebe1 = new OrphanScout(row, col, cookieGrid[0][0]);
+		// int rightCount = 0;
+		// int leftCount = 0;
+		// newStack.push(bebe1);
+		// while (!(newStack.isEmpty())) {
+		// OrphanScout current = newStack.pop();
+		// row = current.getEndingRow();
+		// col = current.getEndingCol();
+		// if (row == numRows - 1 && col == numCols - 1) {
+		// if (current.getCookiesDiscovered() > maxCookies) {
+		// maxCookies = current.getCookiesDiscovered();
+		// }
+		// }
+		// OrphanScout rightKid = new OrphanScout(0, 0, 0);
+		// OrphanScout downKid = new OrphanScout(0, 0, 0);
+		// if (validPoint(row + 1, col)) {
+		// rightCount = current.getCookiesDiscovered() + cookieGrid[row + 1][col];
+		// rightKid = new OrphanScout(row + 1, col, rightCount);
+		// }
+		// if (validPoint(row, col + 1)) {
+		// leftCount = current.getCookiesDiscovered() + cookieGrid[row][col + 1];
+		// downKid = new OrphanScout(row, col + 1, leftCount);
+		// }
+		// if (validPoint(row, col + 1)) {
+		// newStack.push(downKid);
+		// }
+		// if (validPoint(row + 1, col)) {
+		// newStack.push(rightKid);
+		// }
+		// }
+		// return maxCookies;
+		// }
 	}
 }
