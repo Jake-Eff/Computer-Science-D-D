@@ -28,7 +28,9 @@ public class ChocolateHashMapTester {
       inventory.rehash(100);
       inventory.containsKey(k5);
       inventory.currentLoadFactor();
+      System.out.println(inventory.containsValue(b5));
       System.out.println(inventory.get(k5));
       System.out.println(inventory.remove(k5));
+      System.out.println(inventory.toString());
     }
   }
