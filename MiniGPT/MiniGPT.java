@@ -19,7 +19,6 @@ public class MiniGPT {
             int charAsInt;
             int index = 0;
             ArrayList<Character> chars = new ArrayList<>();
-            StringBuilder newString = new StringBuilder();
             while ((charAsInt = reader.read()) != -1) {
                 String currentString = "";
                 char character = (char) charAsInt;
@@ -27,6 +26,7 @@ public class MiniGPT {
             }
 
             for (int i = 0; i <= chars.size() - chainOrder - 1; i++) {
+                StringBuilder newString = new StringBuilder();
                 for (int j = 0; j < chainOrder; j++) {
                     newString.append(chars.get(j + i));
                 }
