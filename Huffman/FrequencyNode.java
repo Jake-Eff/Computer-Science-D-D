@@ -1,19 +1,19 @@
 public class FrequencyNode implements Comparable{
     
-    private Character value;
+    private char value;
     private int frequency;
     private FrequencyNode parent;
     private FrequencyNode childOne;
     private FrequencyNode childTwo;
-    private int binary;
+    private String binary;
 
-    public FrequencyNode(Character value, int frequency){
+    public FrequencyNode(char value, int frequency){
         this.value = value;
         this.frequency = frequency;
         this.parent = null;
         this.childOne = null;
         this.childTwo = null;
-        this.binary = 0;
+        this.binary = "";
         
     }
 
@@ -27,11 +27,11 @@ public class FrequencyNode implements Comparable{
         }
     }
 
-    public Character getValue() {
+    public char getValue() {
         return value;
     }
 
-    public void setValue(Character value) {
+    public void setValue(char value) {
         this.value = value;
     }
 
@@ -67,11 +67,11 @@ public class FrequencyNode implements Comparable{
         this.childTwo = childTwo;
     }
 
-    public int getBinary() {
+    public String getBinary() {
         return binary;
     }
 
-    public void setBinary(int binary) {
+    public void setBinary(String binary) {
         this.binary = binary;
     }
 
