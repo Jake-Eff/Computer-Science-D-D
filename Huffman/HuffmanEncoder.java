@@ -69,4 +69,42 @@ public class HuffmanEncoder {
             System.out.println("bad");
         }
     }
+
+    public void encodeFile(String fileToCompress) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileToCompress));
+            PrintWriter pw = new PrintWriter(fileToCompress + ".huf");
+            int count = 0;
+            char previous;
+            String binary = "";
+            while (br.ready()) {
+                previous = (char) br.read();
+                String binaryCode = encodeChar(previous);
+                count += encodeChar(previous).length();
+                binary += binaryCode;
+                if (binary.length() >= 8) {
+                    String add = binary.substring(0, 8);
+                    pw.write(Integer.parseInt(add, 2));
+                    binary = binary.substring(8);
+                }
+            }
+            binary = (encodeChar((char) 26));
+            count += encodeChar((char) 26).length();
+            int adding = ((8 - (count % 8)) % 8);
+            for (int i = 0; i < adding; i++) {
+                binary += '0';
+            }
+
+            for (int i = 0; i < binary.length() / 8; i++) {
+                String toAdd = binary.substring(0, 8);
+                pw.write((char) Integer.parseInt(toAdd, 2));
+                binary = binary.substring(2);
+            }
+
+            br.close();
+            pw.close();
+        } catch (Exception e) {
+            System.out.println("bad");
+        }
+    }
 }
