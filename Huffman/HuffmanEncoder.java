@@ -8,44 +8,65 @@ import java.util.Map;
 import java.util.Collections;
 
 public class HuffmanEncoder {
-    
-    private HashMap<Character, Integer> dictionary;
 
-    public HuffmanEncoder(String codeFile){
+    private HashMap<Character, String> dictionary;
+
+    public HuffmanEncoder(String codeFile) {
+        dictionary = new HashMap<Character, String>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(codeFile));
-            PrintWriter pw = new PrintWriter(codeFile + ".huf");
 
-            char previous = (char) br.read();
-            int count = 1;
+            char previous;
+            int count = 0;
             String frequency = "";
 
             while (br.ready()) {
                 previous = (char) br.read();
-                if(previous == (char) '\n'){
-                    if(!frequency.equals("")){
-                        dictionary.put(previous, count);
+                if (previous == (char) '\n') {
+                    if (!frequency.equals("")) {
+                        dictionary.put((char) count, frequency);
                         frequency = "";
                     }
                     count++;
-                } else{
+                } else {
                     frequency += previous;
                 }
             }
 
             br.close();
-            pw.write(toReturn.toString());
-            pw.close();
         } catch (Exception e) {
             System.out.println("bad");
         }
     }
 
-    public String encodeChar(char input){
-
+    public String encodeChar(char input) {
+        if (dictionary.get(input) == null) {
+            return "";
+        }
+        return dictionary.get(input);
     }
 
-    public void encodeFileToHuffmanCodes(String fileToCompress, String encodedFile){
-
+    public void encodeFileToHuffmanCodes(String fileToCompress, String encodedFile) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(fileToCompress));
+            PrintWriter pw = new PrintWriter(encodedFile);
+            int count = 0;
+            char previous;
+            while (br.ready()) {
+                previous = (char) br.read();
+                pw.write(encodeChar(previous));
+                count += encodeChar(previous).length();
+            }
+            pw.write(encodeChar((char) 26));
+            count += encodeChar((char) 26).length();
+            int adding = ((8 - (count % 8)) % 8);
+            for (int i = 0; i < adding; i++) {
+                pw.write('0');
+            }
+            br.close();
+            pw.close();
+        } catch (Exception e) {
+            System.out.println("bad");
+        }
     }
 }

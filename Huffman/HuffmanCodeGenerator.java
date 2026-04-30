@@ -9,6 +9,7 @@ import java.util.Collections;
 
 public class HuffmanCodeGenerator {
     private HashMap<Character, Integer> map;
+    private HashMap<Character, String> dictionary;
     private FrequencyNode root;
 
     public FrequencyNode getRoot() {
@@ -22,6 +23,7 @@ public class HuffmanCodeGenerator {
     public HuffmanCodeGenerator(String frequencyFile) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(frequencyFile))) {
             map = new HashMap<Character, Integer>();
+            dictionary = new HashMap<Character, String>();
             int charAsInt;
             while ((charAsInt = reader.read()) != -1) {
                 char character = (char) charAsInt;
@@ -83,16 +85,19 @@ public class HuffmanCodeGenerator {
     }
 
     public void assignBinary(FrequencyNode node) {
-        String current = node.getBinary();
-        node.setBinary(current);
+        String currentNode = node.getBinary();
+        if (node.getChildOne() == null && node.getChildTwo() == null) {
+            dictionary.put(node.getValue(), currentNode);
+        }
         if (node.getChildOne() != null) {
-            node.getChildOne().setBinary(current + "0");
+            node.getChildOne().setBinary(currentNode + "0");
             assignBinary(node.getChildOne());
         }
         if (node.getChildTwo() != null) {
-            node.getChildTwo().setBinary(current + "1");
+            node.getChildTwo().setBinary(currentNode + "1");
             assignBinary(node.getChildTwo());
         }
+
     }
 
     public FrequencyNode getNode(FrequencyNode node, char c) {
@@ -120,28 +125,19 @@ public class HuffmanCodeGenerator {
     }
 
     public String getCode(char c) {
-        FrequencyNode node = getNode(root, c);
-        if (node == null) {
+        if (dictionary.get(c) == null) {
             return "";
+        } else {
+            return dictionary.get(c);
         }
-        return node.getBinary();
     }
 
-    public void makeCodeFile(String codeFile) throws IOException {
+    public void makeCodeFile(String codeFile) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(codeFile));
-            PrintWriter pw = new PrintWriter(codeFile + ".huf");
-
-            StringBuilder toReturn = new StringBuilder();
-            char previous = (char) br.read();
-            while (br.ready()) {
-                previous = (char) br.read();
-                String toAdd = getCode(previous);
-                toReturn.append(toAdd);
+            PrintWriter pw = new PrintWriter(codeFile + ".key");
+            for (int i = 0; i < 128; i++) {
+                pw.println(getCode((char) i));
             }
-
-            br.close();
-            pw.write(toReturn.toString());
             pw.close();
         } catch (Exception e) {
             System.out.println("bad");

@@ -2,10 +2,12 @@ import java.io.IOException;
 
 public class HuffmanTester {
     public static void main(String[] args) {
+        HuffmanCodeGenerator newGenerator;
         try {
-            HuffmanCodeGenerator newGenerator = new HuffmanCodeGenerator("ABCDEFG.txt");
+            newGenerator = new HuffmanCodeGenerator("frequencyCountInput.txt");
             HuffmanTester.printTree(newGenerator.getRoot(), 0);
-            System.out.println(newGenerator.getCode('A'));
+            HuffmanEncoder newEncoder = new HuffmanEncoder("frequencyCountInput.txt.key");
+            newEncoder.encodeFileToHuffmanCodes("frequencyCountInput.txt", "frequencyEncoded.txt");
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();
