@@ -24,7 +24,7 @@ public class HuffmanEncoder {
                 previous = (char) br.read();
                 if (previous == (char) '\n') {
                     if (!frequency.equals("")) {
-                        dictionary.put((char) count, frequency);
+                        dictionary.put((char) count, frequency.trim());
                         frequency = "";
                     }
                     count++;

@@ -10,7 +10,7 @@ public class HuffmanTester {
             newEncoder.encodeFileToHuffmanCodes("frequencyCountInput.txt", "frequencyEncoded.txt");
             newEncoder.encodeFile("frequencyCountInput.txt");
             HuffmanDecoder newDecoder = new HuffmanDecoder("frequencyCountInput.txt.key");
-            newDecoder.decodeFileFromHuffmanCode("frequencyEncoded.txt", "frequencyCountInputDecoded.txt");
+            newDecoder.decodeFileFromHuffmanCodes("frequencyEncoded.txt", "frequencyCountInputDecoded.txt");
         } catch (Exception e) {
             // TODO: handle exception
             e.printStackTrace();

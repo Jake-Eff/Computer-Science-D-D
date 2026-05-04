@@ -21,7 +21,7 @@ public class HuffmanDecoder {
                 previous = (char) br.read();
                 if (previous == (char) '\n') {
                     if (!frequency.equals("")) {
-                        dictionary.put(frequency, (char) count);
+                        dictionary.put(frequency.trim(), (char) count);
                         frequency = "";
                     }
                     count++;
@@ -44,7 +44,7 @@ public class HuffmanDecoder {
         return dictionary.get(binary);
     }
 
-    public void decodeFileFromHuffmanCode(String encodedFile, String decodedFile) {
+    public void decodeFileFromHuffmanCodes(String encodedFile, String decodedFile) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(encodedFile));
             PrintWriter pw = new PrintWriter(decodedFile);
@@ -75,22 +75,29 @@ public class HuffmanDecoder {
         try {
             BufferedReader br = new BufferedReader(new FileReader(encodedFile));
             PrintWriter pw = new PrintWriter(encodedFile.substring(0, encodedFile.length() - 4));
-            int previous;
-            String binary = "";
-            while (br.ready()) {
-                previous = (char) br.read();
-                int charAsInt = (int) previous;
-                binary += previous;
-                String convert = Integer.toBinaryString(charAsInt);
-                if (charAsInt == (char) 26) {
-                    break;
-                }
-                pw.write(decodeChar(binary));
-                binary = "";
+
+            StringBuilder current = new StringBuilder();
+            int charAsInt;
+
+            while(!(charAsInt == )){
 
             }
-            br.close();
-            pw.close();
+            
+            
+            // while (br.ready()) {
+            //     previous = (char) br.read();
+            //     int charAsInt = (int) previous;
+            //     binary += previous;
+            //     String convert = Integer.toBinaryString(charAsInt);
+            //     if (charAsInt == (char) 26) {
+            //         break;
+            //     }
+            //     pw.write(decodeChar(binary));
+            //     binary = "";
+
+            // }
+            // br.close();
+            // pw.close();
         } catch (Exception e) {
             System.out.println("bad");
         }
