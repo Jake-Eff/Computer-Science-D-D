@@ -82,23 +82,23 @@ public class HuffmanEncoder {
                 String binaryCode = encodeChar(previous);
                 count += encodeChar(previous).length();
                 binary += binaryCode;
-                if (binary.length() >= 8) {
+                while (binary.length() >= 8) {
                     String add = binary.substring(0, 8);
                     pw.write(Integer.parseInt(add, 2));
                     binary = binary.substring(8);
                 }
             }
-            binary = (encodeChar((char) 26));
+            binary += (encodeChar((char) 26));
             count += encodeChar((char) 26).length();
             int adding = ((8 - (count % 8)) % 8);
             for (int i = 0; i < adding; i++) {
                 binary += '0';
             }
 
-            for (int i = 0; i < binary.length() / 8; i++) {
+            while (binary.length() >= 8) {
                 String toAdd = binary.substring(0, 8);
                 pw.write((char) Integer.parseInt(toAdd, 2));
-                binary = binary.substring(2);
+                binary = binary.substring(8);
             }
 
             br.close();

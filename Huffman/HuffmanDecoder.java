@@ -79,25 +79,41 @@ public class HuffmanDecoder {
             StringBuilder current = new StringBuilder();
             int charAsInt;
 
-            while(!(charAsInt == )){
-
+            while ((charAsInt = br.read()) != -1) {
+                String binary = Integer.toBinaryString(charAsInt);
+                while (binary.length() < 8) {
+                    binary = '0' + binary;
+                }
+                for (int i = 0; i < binary.length(); i++) {
+                    current.append(binary.charAt(i));
+                    if (isCode(current.toString())) {
+                        char adding = decodeChar(current.toString());
+                        if (adding == (char) 26) {
+                            pw.close();
+                            br.close();
+                            return;
+                        }
+                        pw.write(adding);
+                        current = new StringBuilder("");
+                    }
+                }
             }
-            
-            
+
+
             // while (br.ready()) {
-            //     previous = (char) br.read();
-            //     int charAsInt = (int) previous;
-            //     binary += previous;
-            //     String convert = Integer.toBinaryString(charAsInt);
-            //     if (charAsInt == (char) 26) {
-            //         break;
-            //     }
-            //     pw.write(decodeChar(binary));
-            //     binary = "";
+            // previous = (char) br.read();
+            // int charAsInt = (int) previous;
+            // binary += previous;
+            // String convert = Integer.toBinaryString(charAsInt);
+            // if (charAsInt == (char) 26) {
+            // break;
+            // }
+            // pw.write(decodeChar(binary));
+            // binary = "";
 
             // }
-            // br.close();
-            // pw.close();
+            br.close();
+            pw.close();
         } catch (Exception e) {
             System.out.println("bad");
         }
