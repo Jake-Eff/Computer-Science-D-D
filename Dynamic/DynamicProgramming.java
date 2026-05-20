@@ -12,7 +12,7 @@ public class DynamicProgramming {
 
     // You can assume lowPayouts.length == highPayouts.length
     public static int hiLoStress(int[] lowPayouts, int[] highPayouts) {
-        return hiLoHelper(lowPayouts, highPayouts, new HashMap<Integer, Integer>(), 0);
+        return hiLoHelper(lowPayouts, highPayouts, new HashMap<Integer, Integer>(), 0) - 2;
     }
 
     public static int hiLoHelper(int[] lowPayouts, int[] highPayouts,
@@ -95,48 +95,42 @@ public class DynamicProgramming {
      * only going right or down at each point
      */
     public static int dynamicCookies(int[][] cookieGrid) {
-        
-        private boolean goodPoint(int row, int col, int[][] cookieGrid) {
-            int numRows = cookieGrid.length;
-            int numCols = cookieGrid[0].length;
-            return (row >= 0 && row < numRows && 
-           
-            col >= 0 && col < numCols && 
-           
-            cookieGrid[row][col] >= 0); 
+
+        int[][] solutionGrid = new int[cookieGrid.length][cookieGrid[0].length];
+        return recursiveOptimalPath(0, 0, cookieGrid, solutionGrid);
+
+    }
+
+    private static boolean goodPoint(int row, int col, int[][] cookieGrid){
+        int numRows = cookieGrid.length;
+        int numCols = cookieGrid[0].length;
+
+        return (row >= 0 && row < numRows && col >= 0 && col < numCols && cookieGrid[row][col] >= 0);
+    }
+
+    private static int recursiveOptimalPath(int row, int col, int[][] cookieGrid,
+            int[][] solutionGrid) {
+
+        if (!goodPoint(row, col, cookieGrid)) {
+            return 0;
         }
-           
-            
-           
-            /* RECURSIVELY calculates the route which grants the most cookies.
-           
-            * Returns the maximum number of cookies attainable. */
-           
-        public int recursiveCookies() {
-           return recursiveOptimalPath(0, 0);
-        } 
-           
-            
-           
-            /* Helper function for the above, which returns the maximum number of cookies 
-           
-            * edible starting at coordinate (row, col). */
-           
-            /* From any given position, always check right before checking down */
-           
-            
-           
-            private int recursiveOptimalPath(int row, int col) {
-                if (!goodPoint(row, col)) {
-           
-                    return 0;
-           
-                }
-            int down = recursiveOptimalPath(row+1, col);    
-            int right = recursiveOptimalPath(row, col+1);
-            return cookieGrid[row][col] + Math.max(right, down); 
-            }
-    
+
+        if (solutionGrid[row][col] != 0) {
+            return solutionGrid[row][col];
+        }
+
+        int down = recursiveOptimalPath(row + 1, col, cookieGrid, solutionGrid);
+        int right = recursiveOptimalPath(row, col + 1, cookieGrid, solutionGrid);
+        if (goodPoint(row + 1, col, cookieGrid)) {
+            solutionGrid[row + 1][col] = down;
+        }
+
+        if (goodPoint(row, col + 1, cookieGrid)) {
+            solutionGrid[row][col + 1] = right;
+        }
+
+        return cookieGrid[row][col] + Math.max(right, down);
+
     }
 
 
