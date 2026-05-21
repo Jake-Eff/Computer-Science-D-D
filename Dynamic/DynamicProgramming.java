@@ -12,7 +12,7 @@ public class DynamicProgramming {
 
     // You can assume lowPayouts.length == highPayouts.length
     public static int hiLoStress(int[] lowPayouts, int[] highPayouts) {
-        return hiLoHelper(lowPayouts, highPayouts, new HashMap<Integer, Integer>(), 0) - 2;
+        return hiLoHelper(lowPayouts, highPayouts, new HashMap<Integer, Integer>(), 0);
     }
 
     public static int hiLoHelper(int[] lowPayouts, int[] highPayouts,
@@ -101,11 +101,12 @@ public class DynamicProgramming {
 
     }
 
-    private static boolean goodPoint(int row, int col, int[][] cookieGrid){
+    private static boolean goodPoint(int row, int col, int[][] cookieGrid) {
         int numRows = cookieGrid.length;
         int numCols = cookieGrid[0].length;
 
-        return (row >= 0 && row < numRows && col >= 0 && col < numCols && cookieGrid[row][col] >= 0);
+        return (row >= 0 && row < numRows && col >= 0 && col < numCols
+                && cookieGrid[row][col] >= 0);
     }
 
     private static int recursiveOptimalPath(int row, int col, int[][] cookieGrid,
